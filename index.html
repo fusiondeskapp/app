@@ -4,22 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FusionDesk Premium</title>
-    
-    <!-- Meta Theme Color -->
     <meta name="theme-color" content="#4f46e5">
-
-    <!-- Google Fonts: Rajdhani -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- Custom CSS3 (Mobile First & Anti-Offside) -->
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 50%, #fdf2f8 100%);
@@ -43,7 +33,6 @@
             --radius-lg: 1rem;
             --radius-xl: 1.5rem;
         }
-
         .dark {
             --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
             --glass-bg: rgba(15, 23, 42, 0.85);
@@ -57,14 +46,8 @@
             --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
             --shadow-glow: 0 4px 14px 0 rgba(79, 70, 229, 0.5);
         }
-
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        html, body {
-            max-width: 100vw;
-            overflow-x: hidden;
-        }
-
+        html, body { max-width: 100vw; overflow-x: hidden; }
         body { 
             font-family: 'Rajdhani', sans-serif; 
             background: var(--bg-gradient); 
@@ -78,14 +61,9 @@
             padding-bottom: 85px;
             transition: background 0.3s, color 0.3s;
         }
-
-        @media (min-width: 768px) { 
-            body { padding-bottom: 0; font-size: 1.05rem; } 
-        }
-
+        @media (min-width: 768px) { body { padding-bottom: 0; font-size: 1.05rem; } }
         .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0.75rem; }
         @media (min-width: 768px) { .container { padding: 1.5rem; } }
-
         .hidden { display: none !important; }
         .flex { display: flex; }
         .flex-col { flex-direction: column; }
@@ -104,7 +82,6 @@
         .mb-4 { margin-bottom: 1rem; }
         .mb-6 { margin-bottom: 1.5rem; }
         .mx-auto { margin-left: auto; margin-right: auto; }
-
         .grid { display: grid; gap: 1rem; }
         .grid-cols-1 { grid-template-columns: 1fr; }
         @media (min-width: 768px) {
@@ -114,21 +91,12 @@
             .md-flex-row { flex-direction: row; }
             .md-w-auto { width: auto; }
         }
-
         .glass-card {
-            background: var(--glass-card);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 1.25rem;
-            padding: 1rem;
-            box-shadow: var(--shadow-md);
-            width: 100%;
+            background: var(--glass-card); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border); border-radius: 1.25rem; padding: 1rem;
+            box-shadow: var(--shadow-md); width: 100%;
         }
-        @media (min-width: 768px) {
-            .glass-card { border-radius: 1.5rem; padding: 1.5rem; }
-        }
-
+        @media (min-width: 768px) { .glass-card { border-radius: 1.5rem; padding: 1.5rem; } }
         h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;}
         h3 { font-size: 1.15rem; font-weight: 700; }
         @media (min-width: 768px) { h2 { font-size: 1.75rem; } h3 { font-size: 1.35rem; } }
@@ -146,14 +114,12 @@
         .text-danger { color: var(--danger); }
         .text-info { color: var(--info); }
         .text-secondary { color: var(--secondary); }
-
         .header {
             position: sticky; top: 0; z-index: 50; 
             background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--glass-border); padding: 0.75rem 1rem; margin-bottom: 1rem;
             border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: var(--shadow-sm);
+            display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm);
         }
         .desktop-nav {
             display: none; gap: 0.5rem; background: rgba(0,0,0,0.05); padding: 0.3rem; 
@@ -161,23 +127,17 @@
         }
         .dark .desktop-nav { background: rgba(0,0,0,0.2); }
         @media (min-width: 768px) { .desktop-nav { display: flex; } }
-
         .mobile-nav {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
             background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border-top: 1px solid var(--glass-border); 
             padding: 0.5rem 0.25rem calc(0.5rem + env(safe-area-inset-bottom, 0px)) 0.25rem;
-            display: flex; 
-            justify-content: flex-start;
-            overflow-x: auto;
-            gap: 0.5rem;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-            border-radius: 1.25rem 1.25rem 0 0;
+            display: flex; justify-content: flex-start; overflow-x: auto; gap: 0.5rem;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15); border-radius: 1.25rem 1.25rem 0 0;
             -webkit-overflow-scrolling: touch;
         }
         .dark .mobile-nav { box-shadow: 0 -4px 20px rgba(0,0,0,0.5); }
         @media (min-width: 768px) { .mobile-nav { display: none; } }
-
         .tab-btn {
             background: transparent; border: none; color: var(--text-muted);
             font-family: inherit; font-weight: 600; cursor: pointer; transition: all 0.3s;
@@ -189,17 +149,14 @@
         .mobile-nav .tab-btn {
             font-size: 0.65rem; padding: 0.4rem 0.1rem; border-radius: 0.5rem;
             display: flex; flex-direction: column; align-items: center; gap: 0.2rem; 
-            flex: 0 0 auto;
-            min-width: 65px;
+            flex: 0 0 auto; min-width: 65px;
         }
         .tab-btn:hover { color: var(--primary); background: rgba(79, 70, 229, 0.1); }
         .tab-btn.active { color: #fff; background: linear-gradient(135deg, var(--primary), var(--info)); box-shadow: var(--shadow-glow); }
-
         .text-gradient {
             background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             background-image: linear-gradient(to right, var(--primary), var(--secondary));
         }
-
         .form-group { margin-bottom: 1rem; width: 100%; }
         .form-label { display: block; font-weight: 600; margin-bottom: 0.4rem; color: var(--text-main); font-size: 0.9rem; }
         .form-control {
@@ -211,7 +168,6 @@
         .dark .form-control { background: rgba(0,0,0,0.3); }
         .form-control:focus { border-color: var(--primary); }
         textarea.form-control { resize: vertical; }
-
         .btn {
             display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
             padding: 0.65rem 1.2rem; font-family: inherit; font-size: 0.95rem; font-weight: 700;
@@ -231,7 +187,6 @@
         }
         .dark .btn-icon { background: rgba(255,255,255,0.05); }
         .btn-icon:hover { background: var(--border-color); }
-
         .table-wrapper { 
             width: 100%; max-width: 100vw; overflow-x: auto; margin-top: 1rem; 
             border-radius: 1rem; border: 1px solid var(--border-color); background: rgba(255,255,255,0.3); 
@@ -245,9 +200,7 @@
         tr:last-child td { border-bottom: none; }
         tr:hover td { background: rgba(128,128,128,0.05); }
         .dark tr:hover td { background: rgba(255,255,255,0.01); }
-
         .badge { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
-
         .modal {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1000;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
@@ -262,23 +215,19 @@
         }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); }
-
         .icon-box { width: 3rem; height: 3rem; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; }
         .bg-gradient-primary { background: linear-gradient(135deg, var(--primary), var(--info)); }
         .bg-gradient-danger { background: linear-gradient(135deg, var(--danger), #fb7185); }
         .bg-gradient-warning { background: linear-gradient(135deg, var(--warning), #fbbf24); }
         .bg-gradient-secondary { background: linear-gradient(135deg, #8b5cf6, var(--secondary)); }
-
         .loader {
             border: 3px solid rgba(128,128,128,0.2); border-radius: 50%; border-top: 3px solid var(--primary);
             width: 24px; height: 24px; animation: spin 1s linear infinite; display: inline-block;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
-        
         .action-bar { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; }
         @media (min-width: 768px) { .action-bar { flex-direction: row; align-items: center; width: auto; } }
     </style>
@@ -316,8 +265,6 @@
                 </div>
                 <span class="text-xl md:text-2xl font-bold" style="background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">FusionDesk</span>
             </div>
-            
-            <!-- Desktop Nav -->
             <nav class="desktop-nav" id="main-nav-desktop">
                 <button onclick="switchTab('dashboard')" id="tab-dashboard-desktop" class="tab-btn active"><i data-lucide="layout-dashboard"></i> <span>Dashboard</span></button>
                 <button onclick="switchTab('worktracker')" id="tab-worktracker-desktop" class="tab-btn"><i data-lucide="list-todo"></i> <span>Tracker</span></button>
@@ -327,7 +274,6 @@
                 <button onclick="switchTab('accounts')" id="tab-accounts-desktop" class="tab-btn"><i data-lucide="users"></i> <span>Accounts</span></button>
                 <button onclick="switchTab('prompt')" id="tab-prompt-desktop" class="tab-btn"><i data-lucide="sparkles"></i> <span>Prompt AI</span></button>
             </nav>
-
             <div class="flex gap-2 items-center">
                 <button onclick="toggleTheme()" class="btn-icon" title="Ganti Tema"><i id="theme-icon" data-lucide="moon"></i></button>
                 <button onclick="logout()" class="btn-icon text-danger" style="background: rgba(225, 29, 72, 0.1);" title="Keluar"><i data-lucide="log-out"></i></button>
@@ -336,11 +282,9 @@
     </header>
 
     <main class="container flex-grow">
-        
         <!-- DASHBOARD -->
         <div id="view-dashboard" class="block">
             <h2 class="text-primary"><i data-lucide="pie-chart"></i> Overview Statistik</h2>
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
                 <div class="glass-card">
                     <h3 class="mb-4 flex items-center gap-2"><i data-lucide="list-todo" class="text-primary"></i> Work Tracker</h3>
@@ -359,7 +303,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="glass-card">
                     <h3 class="mb-4 flex items-center gap-2"><i data-lucide="shopping-cart" class="text-success"></i> Penjualan</h3>
                     <div class="grid grid-cols-2 gap-3">
@@ -381,7 +324,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                 <div class="glass-card flex items-center gap-4">
                     <div class="icon-box bg-gradient-secondary"><i data-lucide="users"></i></div>
@@ -416,12 +358,8 @@
                 </div>
                 <div class="table-wrapper">
                     <table>
-                        <thead>
-                            <tr><th>Job Name</th><th>Linimasa</th><th>SB</th><th>PIC</th><th>Status</th><th>Links</th><th class="text-right">Aksi</th></tr>
-                        </thead>
-                        <tbody id="table-body">
-                            <tr><td colspan="7" class="text-center text-muted p-6"><div class="loader"></div> Memuat data...</td></tr>
-                        </tbody>
+                        <thead><tr><th>Job Name</th><th>Linimasa</th><th>SB</th><th>PIC</th><th>Status</th><th>Links</th><th class="text-right">Aksi</th></tr></thead>
+                        <tbody id="table-body"><tr><td colspan="7" class="text-center text-muted p-6"><div class="loader"></div> Memuat data...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -446,12 +384,8 @@
                 </div>
                 <div class="table-wrapper">
                     <table>
-                        <thead>
-                            <tr><th>Tgl / Resi</th><th>Marketplace</th><th>Customer</th><th>Product (Qty)</th><th>Total Harga</th><th>Status</th><th class="text-right">Aksi</th></tr>
-                        </thead>
-                        <tbody id="sales-table-body">
-                            <tr><td colspan="7" class="text-center text-muted p-6"><div class="loader"></div> Memuat data penjualan...</td></tr>
-                        </tbody>
+                        <thead><tr><th>Tgl / Resi</th><th>Marketplace</th><th>Customer</th><th>Product (Qty)</th><th>Total Harga</th><th>Status</th><th class="text-right">Aksi</th></tr></thead>
+                        <tbody id="sales-table-body"><tr><td colspan="7" class="text-center text-muted p-6"><div class="loader"></div> Memuat data penjualan...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -471,12 +405,8 @@
                 </div>
                 <div class="table-wrapper">
                     <table>
-                        <thead>
-                            <tr><th>Tgl Retur</th><th>Resi</th><th>Customer</th><th>Product</th><th>Gudang</th><th>Bukti Foto</th><th class="text-right">Aksi</th></tr>
-                        </thead>
-                        <tbody id="returned-table-body">
-                            <tr><td colspan="7" class="text-center text-muted p-6"><div class="loader"></div> Memuat data retur...</td></tr>
-                        </tbody>
+                        <thead><tr><th>Tgl Retur</th><th>Resi</th><th>Customer</th><th>Product</th><th>Gudang</th><th>Bukti Foto</th><th class="text-right">Aksi</th></tr></thead>
+                        <tbody id="returned-table-body"><tr><td colspan="7" class="text-center text-muted p-6"><div class="loader"></div> Memuat data retur...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -496,12 +426,8 @@
                 </div>
                 <div class="table-wrapper">
                     <table>
-                        <thead>
-                            <tr><th>Nama Produk</th><th>SKU</th><th>Harga Satuan</th><th>Grosir (2-3)</th><th>Grosir (4-8)</th><th>Fee</th><th class="text-right">Aksi</th></tr>
-                        </thead>
-                        <tbody id="product-table-body">
-                            <tr><td colspan="7" class="text-center text-muted p-6"><div class="loader"></div> Memuat data produk...</td></tr>
-                        </tbody>
+                        <thead><tr><th>Nama Produk</th><th>SKU</th><th>Harga Satuan</th><th>Grosir (2-3)</th><th>Grosir (4-8)</th><th>Fee</th><th class="text-right">Aksi</th></tr></thead>
+                        <tbody id="product-table-body"><tr><td colspan="7" class="text-center text-muted p-6"><div class="loader"></div> Memuat data produk...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -521,12 +447,8 @@
                 </div>
                 <div class="table-wrapper">
                     <table>
-                        <thead>
-                            <tr><th>Platform / Tgl</th><th>Email</th><th>Password</th><th>2FA</th><th class="text-right">Aksi</th></tr>
-                        </thead>
-                        <tbody id="acc-table-body">
-                            <tr><td colspan="5" class="text-center text-muted p-6"><div class="loader"></div> Memuat data...</td></tr>
-                        </tbody>
+                        <thead><tr><th>Platform / Tgl</th><th>Email</th><th>Password</th><th>2FA</th><th class="text-right">Aksi</th></tr></thead>
+                        <tbody id="acc-table-body"><tr><td colspan="5" class="text-center text-muted p-6"><div class="loader"></div> Memuat data...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -549,7 +471,6 @@
                 </div>
             </div>
         </div>
-
     </main>
 
     <!-- MOBILE BOTTOM APP BAR -->
@@ -562,14 +483,229 @@
         <button onclick="switchTab('accounts')" id="tab-accounts-mobile" class="tab-btn"><i data-lucide="users" style="width: 20px; height: 20px;"></i><span>Akun</span></button>
         <button onclick="switchTab('prompt')" id="tab-prompt-mobile" class="tab-btn"><i data-lucide="sparkles" style="width: 20px; height: 20px;"></i><span>Prompt</span></button>
     </nav>
+    <!-- MODAL JOB -->
+    <div id="modal-job" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="form-job-title" class="text-xl md:text-2xl font-bold text-gradient">Input Pekerjaan</h2>
+                <button type="button" onclick="closeJobModal()" class="btn-icon"><i data-lucide="x"></i></button>
+            </div>
+            <form id="jobForm" onsubmit="submitJobForm(event)">
+                <input type="hidden" id="edit-row-id" value="">
+                <div class="glass-card mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group"><label class="form-label">Nama Pekerjaan</label><input type="text" id="inp-job" required class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Created</label><input type="date" id="inp-created" required class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Schedule</label><input type="date" id="inp-schedule" required class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Published</label><input type="date" id="inp-published" required class="form-control"></div>
+                    </div>
+                </div>
+                <div class="glass-card mb-4">
+                    <label class="form-label flex items-center gap-2"><i data-lucide="image" class="text-secondary"></i> Storyboard</label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input type="file" id="inp-scene1" accept="image/*,.pdf" class="form-control" style="padding: 0.5rem;">
+                        <input type="file" id="inp-scene2" accept="image/*,.pdf" class="form-control" style="padding: 0.5rem;">
+                        <input type="file" id="inp-scene3" accept="image/*,.pdf" class="form-control" style="padding: 0.5rem;">
+                    </div>
+                </div>
+                <div class="glass-card mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label">Create Video (PIC)</label><input list="createVideo-options" id="inp-createVideo" class="form-control"><datalist id="createVideo-options"></datalist></div>
+                        <div class="form-group"><label class="form-label">Download</label><select id="inp-download" class="form-control"><option value="BELUM">BELUM</option><option value="SUDAH">SUDAH</option></select></div>
+                        <div class="form-group"><label class="form-label">Edit</label><select id="inp-edit" class="form-control"><option value="BELUM">BELUM</option><option value="SUDAH">SUDAH</option></select></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-color pt-4">
+                        <input type="url" id="inp-fb" class="form-control" placeholder="Facebook URL">
+                        <input type="url" id="inp-tiktok" class="form-control" placeholder="TikTok URL">
+                        <input type="url" id="inp-youtube" class="form-control" placeholder="YouTube URL">
+                        <input type="url" id="inp-blogspot" class="form-control" placeholder="Blogspot URL">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 flex-col md:flex-row">
+                    <button type="button" onclick="closeJobModal()" class="btn btn-outline w-full md:w-auto justify-center">Batal</button>
+                    <button type="submit" id="btn-submit-job" class="btn btn-primary w-full md:w-auto justify-center"><i data-lucide="save"></i> Simpan Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <!-- Semua modal (job, sales, returned, product, account, prompt) sama persis seperti sebelumnya, tidak berubah -->
-    <!-- ... (modal kode tetap sama) ... -->
+    <!-- MODAL SALES -->
+    <div id="modal-sales" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="form-sales-title" class="text-xl md:text-2xl font-bold text-success">Input Penjualan</h2>
+                <button type="button" onclick="closeSalesModal()" class="btn-icon"><i data-lucide="x"></i></button>
+            </div>
+            <form id="salesForm" onsubmit="submitSalesForm(event)">
+                <input type="hidden" id="sales-row-id" value="">
+                <div class="glass-card mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label">Tanggal</label><input type="date" id="inp-sales-date" required class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Gudang</label><input list="gudang-sales-list" id="inp-sales-gudang" required class="form-control"><datalist id="gudang-sales-list"><option value="Gudang Majenang"><option value="Gudang Jakarta"></datalist></div>
+                        <div class="form-group"><label class="form-label">Kurir</label><input list="kurir-sales-list" id="inp-sales-kurir" required class="form-control"><datalist id="kurir-sales-list"><option value="J&T"><option value="JNE"><option value="TIKI"><option value="Instan"><option value="Sameday"></datalist></div>
+                        <div class="form-group"><label class="form-label text-success flex items-center gap-1"><i data-lucide="truck"></i> No. Resi</label><input type="text" id="inp-sales-resi" oninput="checkResiStatus()" class="form-control" placeholder="Otomatis Shipped"></div>
+                    </div>
+                </div>
+                <div class="glass-card mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label">Marketplace</label><input list="market-list" id="inp-sales-market" required class="form-control"><datalist id="market-list"><option value="Shopee"><option value="Tokopedia"><option value="Lazada"><option value="TikTok Shop"><option value="WhatsApp"></datalist></div>
+                        <div class="form-group"><label class="form-label">Nama Customer</label><input type="text" id="inp-sales-name" required class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Nomor HP</label><input type="text" id="inp-sales-phone" required class="form-control"></div>
+                    </div>
+                    <div class="grid grid-cols-1 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label">Alamat Lengkap</label><textarea id="inp-sales-address" rows="2" required class="form-control"></textarea></div>
+                    </div>
+                </div>
+                <div class="glass-card mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="form-group"><label class="form-label">Product</label><select id="inp-sales-product" required class="form-control"><option value="">Pilih Produk...</option></select></div>
+                        <div class="form-group"><label class="form-label">Quantity</label><input type="number" id="inp-sales-qty" required class="form-control" min="1" value="1"></div>
+                        <div class="form-group"><label class="form-label">Harga Total</label><input type="number" id="inp-sales-price" required class="form-control text-success font-bold"></div>
+                        <div class="form-group">
+                            <label class="form-label">Status Pesanan</label>
+                            <select id="inp-sales-status" required class="form-control font-bold">
+                                <option value="Pending">Pending</option><option value="Processing">Processing</option><option value="Shipped">Shipped</option><option value="Completed">Completed</option><option value="Returned">Returned</option><option value="Failed COD">Failed COD</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 flex-col md:flex-row">
+                    <button type="button" onclick="closeSalesModal()" class="btn btn-outline w-full md:w-auto justify-center">Batal</button>
+                    <button type="submit" class="btn btn-success w-full md:w-auto justify-center"><i data-lucide="save"></i> Simpan Penjualan</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <!-- CORE SCRIPTS -->
+    <!-- MODAL RETURNED -->
+    <div id="modal-returned" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2 class="text-xl md:text-2xl font-bold text-danger flex items-center gap-2"><i data-lucide="corner-down-left"></i> Retur Penjualan</h2>
+                <button type="button" onclick="closeReturnedModal()" class="btn-icon"><i data-lucide="x"></i></button>
+            </div>
+            <form id="returnedForm" onsubmit="submitReturnedForm(event)">
+                <input type="hidden" id="retur-sales-row-id" value="">
+                <div class="glass-card mb-4" style="background: rgba(79, 70, 229, 0.05); border-color: rgba(79, 70, 229, 0.2);">
+                    <div class="form-group mb-0">
+                        <label class="form-label text-primary flex items-center gap-1"><i data-lucide="search" style="width: 1.2rem;"></i> Cari Transaksi Penjualan</label>
+                        <select id="inp-retur-select-sales" class="form-control" onchange="autoFillReturFromSales()" required>
+                            <option value="">-- Pilih Transaksi Penjualan --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="glass-card mb-4">
+                    <p class="text-sm font-bold text-muted mb-2">Informasi Pesanan Asli</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label">Tgl Order</label><input type="date" id="inp-retur-tanggal" required class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                        <div class="form-group"><label class="form-label text-danger flex items-center gap-1"><i data-lucide="truck"></i> No. Resi</label><input type="text" id="inp-retur-resi" class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                        <div class="form-group"><label class="form-label">Marketplace</label><input type="text" id="inp-retur-marketplace" required class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label">Nama Customer</label><input type="text" id="inp-retur-name" required class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                        <div class="form-group"><label class="form-label">Nomor HP</label><input type="text" id="inp-retur-phone" required class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                        <div class="form-group md:col-span-2"><label class="form-label">Alamat Lengkap</label><textarea id="inp-retur-address" rows="2" class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></textarea></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="form-group"><label class="form-label">Product</label><input type="text" id="inp-retur-product" required class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                        <div class="form-group"><label class="form-label">Quantity</label><input type="number" id="inp-retur-qty" required class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                        <div class="form-group"><label class="form-label">Harga Total</label><input type="number" id="inp-retur-harga" required class="form-control text-danger font-bold" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                    </div>
+                </div>
+                <div class="glass-card mb-6" style="background: rgba(225, 29, 72, 0.05); border-color: rgba(225, 29, 72, 0.2);">
+                    <p class="text-sm font-bold text-danger mb-2">Detail Retur</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="form-group"><label class="form-label">Tgl Returned</label><input type="date" id="inp-retur-tgl" required class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Gudang</label><input list="gudang-list" id="inp-retur-gudang" required class="form-control"><datalist id="gudang-list"><option value="Gudang Majenang"><option value="Gudang Jakarta"></datalist></div>
+                        <div class="form-group"><label class="form-label">Bukti Foto</label><input type="file" id="inp-retur-foto" accept="image/*" class="form-control" style="padding: 0.5rem;" required></div>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 flex-col md:flex-row">
+                    <button type="button" onclick="closeReturnedModal()" class="btn btn-outline w-full md:w-auto justify-center">Batal</button>
+                    <button type="submit" class="btn btn-danger-bg w-full md:w-auto justify-center"><i data-lucide="save"></i> Simpan Retur</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL PRODUCT -->
+    <div id="modal-product" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 class="text-xl md:text-2xl font-bold text-info flex items-center gap-2"><i data-lucide="package-plus"></i> Form Produk</h2>
+                <button type="button" onclick="closeProductModal()" class="btn-icon"><i data-lucide="x"></i></button>
+            </div>
+            <form id="productForm" onsubmit="submitProductForm(event)">
+                <input type="hidden" id="prod-row-id" value="">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="form-group"><label class="form-label">Nama Produk</label><input type="text" id="inp-prod-name" required class="form-control"></div>
+                    <div class="form-group"><label class="form-label">SKU</label><input type="text" id="inp-prod-sku" required class="form-control"></div>
+                </div>
+                <div class="glass-card mb-6" style="background: rgba(14, 165, 233, 0.05); border-color: rgba(14, 165, 233, 0.2);">
+                    <p class="text-sm font-bold text-info mb-2">Pengaturan Harga</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label text-success">Satuan (Rp)</label><input type="number" id="inp-prod-price" required class="form-control font-bold"></div>
+                        <div class="form-group"><label class="form-label">Grosir 2-3 (Rp)</label><input type="number" id="inp-prod-grosir23" class="form-control" placeholder="Opsional"></div>
+                        <div class="form-group"><label class="form-label">Grosir 4-8 (Rp)</label><input type="number" id="inp-prod-grosir48" class="form-control" placeholder="Opsional"></div>
+                    </div>
+                    <div class="form-group mb-0"><label class="form-label text-warning">Fee (Rp)</label><input type="number" id="inp-prod-fee" required class="form-control"></div>
+                </div>
+                <div class="flex justify-end gap-2 flex-col md:flex-row">
+                    <button type="button" onclick="closeProductModal()" class="btn btn-outline w-full md:w-auto justify-center">Batal</button>
+                    <button type="submit" class="btn btn-primary w-full md:w-auto justify-center" style="background: var(--info);"><i data-lucide="save"></i> Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL ACCOUNT -->
+    <div id="modal-account" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 id="modal-account-title" class="text-xl md:text-2xl font-bold text-secondary flex items-center gap-2"><i data-lucide="user-plus"></i> Tambah Akun</h2>
+                <button type="button" onclick="closeAccountModal()" class="btn-icon"><i data-lucide="x"></i></button>
+            </div>
+            <form id="form-account" onsubmit="submitAccountForm(event)">
+                <input type="hidden" id="acc-row-id" value="">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="form-group"><label class="form-label">Date Created</label><input type="date" id="inp-acc-created" required class="form-control"></div>
+                    <div class="form-group"><label class="form-label">Platform</label><input list="platform-options" id="inp-acc-platform" required class="form-control"><datalist id="platform-options"><option value="Gmail"><option value="TikTok"><option value="Facebook"><option value="Instagram"><option value="YouTube"></datalist></div>
+                </div>
+                <div class="form-group"><label class="form-label">Email / Username</label><input type="text" id="inp-acc-email" required class="form-control"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="form-group"><label class="form-label">Password</label><input type="text" id="inp-acc-password" required class="form-control"></div>
+                    <div class="form-group"><label class="form-label">2FA / Auth</label><input type="text" id="inp-acc-twofa" class="form-control" placeholder="Opsional"></div>
+                </div>
+                <div class="form-group mb-6"><label class="form-label">Phone Number</label><input type="text" id="inp-acc-phone" class="form-control" placeholder="Opsional"></div>
+                <div class="flex justify-end gap-2 flex-col md:flex-row">
+                    <button type="button" onclick="closeAccountModal()" class="btn btn-outline w-full md:w-auto justify-center">Batal</button>
+                    <button type="submit" class="btn btn-secondary w-full md:w-auto justify-center"><i data-lucide="save"></i> Simpan Akun</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL PROMPT -->
+    <div id="modal-prompt" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 id="modal-prompt-title" class="text-xl md:text-2xl font-bold text-warning flex items-center gap-2"><i data-lucide="wand-2"></i> Tambah Prompt</h2>
+                <button type="button" onclick="closePromptModal()" class="btn-icon"><i data-lucide="x"></i></button>
+            </div>
+            <form id="form-prompt" onsubmit="submitPromptForm(event)">
+                <input type="hidden" id="prompt-row-id" value="">
+                <div class="form-group"><label class="form-label">Nama Prompt</label><input type="text" id="inp-prompt-nama" required class="form-control"></div>
+                <div class="form-group mb-6"><label class="form-label">Isi Prompt</label><textarea id="inp-prompt-isi" required rows="5" class="form-control"></textarea></div>
+                <div class="flex justify-end gap-2 flex-col md:flex-row">
+                    <button type="button" onclick="closePromptModal()" class="btn btn-outline w-full md:w-auto justify-center">Batal</button>
+                    <button type="submit" class="btn btn-warning w-full md:w-auto justify-center" style="color: #000;"><i data-lucide="save"></i> Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script>
-        // ========== KONFIGURASI API ==========
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzWHHtbc_h2aP9S9wHAmSD3rU5fp_AyvwyqakHk_Nras7mwzKMUUHQlxGHgRIgb5HXe/exec'; // <-- GANTI DENGAN URL WEB APP LO
+        // ========== GANTI DENGAN URL WEB APP LO ==========
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzWHHtbc_h2aP9S9wHAmSD3rU5fp_AyvwyqakHk_Nras7mwzKMUUHQlxGHgRIgb5HXe/exec';
 
         // ========== API HELPER ==========
         async function callAPI(action, params = {}) {
@@ -764,7 +900,6 @@
             if(document.getElementById('stat-completed')) document.getElementById('stat-completed').innerText=c; 
             if(document.getElementById('stat-pending')) document.getElementById('stat-pending').innerText=p; 
         }
-        
         function openJobModal() { document.getElementById('jobForm').reset(); document.getElementById('edit-row-id').value=''; document.getElementById('modal-job').classList.add('active'); }
         function closeJobModal() { document.getElementById('modal-job').classList.remove('active'); }
         function editJob(id) { 
@@ -774,7 +909,6 @@
                 document.getElementById('modal-job').classList.add('active'); 
             } 
         }
-
         async function submitJobForm(e) { 
             e.preventDefault(); const rowId = document.getElementById('edit-row-id').value;
             Swal.fire({ title: 'Memproses...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
@@ -788,7 +922,6 @@
                 loadJobsData();
             } catch (err) { Swal.fire('Error', 'Error: ' + err.message, 'error'); }
         }
-
         function deleteJob(id) { 
             Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#e11d48' }).then((res) => {
                 if (res.isConfirmed) {
@@ -799,7 +932,6 @@
                 }
             }); 
         }
-
         function applyJobFilter() {
             const s = document.getElementById('search-filter').value.toLowerCase(), f = document.getElementById('status-filter').value;
             renderTable(globalJobsData.filter(i => {
@@ -916,7 +1048,6 @@
             const diff = now.getDate() - day + (day === 0 ? -6 : 1);
             const startOfWeek = new Date(now.getFullYear(), now.getMonth(), diff).getTime();
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
-
             if(!data || data.length === 0){ 
                 tbody.innerHTML=`<tr><td colspan="7" class="text-center p-6 text-muted">Data kosong.</td></tr>`; 
                 updateSalesStatsUI(0,0,0,0,0,0);
