@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FusionDesk Premium</title>
+    
+    <!-- Meta Theme Color -->
+    <meta name="theme-color" content="#4f46e5">
+
+    <!-- Google Fonts: Rajdhani -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Custom CSS3 (Mobile First & Anti-Offside) -->
+    <style>
+        :root {
+            /* Light Theme Variables */
+            --bg-gradient: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 50%, #fdf2f8 100%);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-card: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --primary: #4f46e5;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #e11d48;
+            --info: #0ea5e9;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-glow: 0 4px 14px 0 rgba(79, 70, 229, 0.39);
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.5rem;
+        }
+
+        .dark {
+            /* Dark Theme Variables */
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            --glass-bg: rgba(15, 23, 42, 0.85);
+            --glass-card: rgba(30, 41, 59, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 4px 14px 0 rgba(79, 70, 229, 0.5);
+        }
+
+        /* Reset & Base */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden; /* Mencegah offside horizontal pada layar kecil */
+        }
+
+        body { 
+            font-family: 'Rajdhani', sans-serif; 
+            background: var(--bg-gradient); 
+            color: var(--text-main); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            font-size: 0.95rem; /* Base font sedikit lebih kecil di HP */
+            line-height: 1.5; 
+            background-attachment: fixed;
+            padding-bottom: 85px; /* Ruang untuk Bottom App Bar */
+            transition: background 0.3s, color 0.3s;
+        }
+
+        @media (min-width: 768px) { 
+            body { padding-bottom: 0; font-size: 1.05rem; } 
+        }
+
+        /* Layout Utilities */
+        .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0.75rem; }
+        @media (min-width: 768px) { .container { padding: 1.5rem; } }
+
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .flex-wrap { flex-wrap: wrap; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-end { justify-content: flex-end; }
+        .gap-1 { gap: 0.25rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .w-full { width: 100%; }
+        .h-full { height: 100%; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+
+        /* Grid System (Mobile First) */
+        .grid { display: grid; gap: 1rem; }
+        .grid-cols-1 { grid-template-columns: 1fr; }
+        .grid-cols-2 { grid-template-columns: 1fr; }
+        .grid-cols-3 { grid-template-columns: 1fr; }
+        .grid-cols-4 { grid-template-columns: 1fr; }
+        
+        @media (min-width: 768px) {
+            .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+            .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+            .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+            .md-flex-row { flex-direction: row; }
+            .md-w-auto { width: auto; }
+        }
+
+        /* Glassmorphism Components */
+        .glass-card {
+            background: var(--glass-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.25rem;
+            padding: 1rem;
+            box-shadow: var(--shadow-md);
+            width: 100%;
+        }
+        @media (min-width: 768px) {
+            .glass-card { border-radius: 1.5rem; padding: 1.5rem; }
+        }
+
+        /* Typography */
+        h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;}
+        h3 { font-size: 1.15rem; font-weight: 700; }
+        @media (min-width: 768px) { h2 { font-size: 1.75rem; } h3 { font-size: 1.35rem; } }
+        .font-bold { font-weight: 700; }
+        .text-muted { color: var(--text-muted); }
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.85rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .text-3xl { font-size: 2rem; }
+        @media (min-width: 768px) {
+            .text-sm { font-size: 0.9rem; }
+            .text-2xl { font-size: 1.75rem; }
+            .text-3xl { font-size: 2.25rem; }
+        }
+        
+        .text-primary { color: var(--primary); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-danger { color: var(--danger); }
+        .text-info { color: var(--info); }
+        .text-secondary { color: var(--secondary); }
+
+        /* Navigation Header */
+        .header {
+            position: sticky; top: 0; z-index: 50; 
+            background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border); padding: 0.75rem 1rem; margin-bottom: 1rem;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: var(--shadow-sm);
+        }
+        @media (min-width: 768px) {
+            .header { padding: 1rem 1.5rem; margin-bottom: 1.5rem; border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
+        }
+
+        /* Nav Tabs (Desktop) */
+        .desktop-nav {
+            display: none; gap: 0.5rem; background: rgba(0,0,0,0.05); padding: 0.3rem; 
+            border-radius: var(--radius-md); border: 1px solid var(--glass-border);
+        }
+        .dark .desktop-nav { background: rgba(0,0,0,0.2); }
+        @media (min-width: 768px) { .desktop-nav { display: flex; } }
+
+        /* Nav Tabs (Mobile Bottom App Bar) */
+        .mobile-nav {
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
+            background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid var(--glass-border); 
+            padding: 0.5rem 0.25rem calc(0.5rem + env(safe-area-inset-bottom, 0px)) 0.25rem;
+            display: flex; 
+            justify-content: flex-start; /* Mengubah jadi flex-start agar bisa discroll */
+            overflow-x: auto; /* Bisa digeser / diswipe */
+            gap: 0.5rem;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+            border-radius: 1.25rem 1.25rem 0 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .dark .mobile-nav { box-shadow: 0 -4px 20px rgba(0,0,0,0.5); }
+        @media (min-width: 768px) { .mobile-nav { display: none; } }
+
+        /* General Tab Button Styles */
+        .tab-btn {
+            background: transparent; border: none; color: var(--text-muted);
+            font-family: inherit; font-weight: 600; cursor: pointer; transition: all 0.3s;
+        }
+        
+        .desktop-nav .tab-btn {
+            font-size: 1.05rem; padding: 0.5rem 1rem; border-radius: var(--radius-md);
+            display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;
+        }
+        
+        .mobile-nav .tab-btn {
+            font-size: 0.65rem; padding: 0.4rem 0.1rem; border-radius: 0.5rem;
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem; 
+            flex: 0 0 auto; /* Mencegah tombol mengkerut dan memaksanya discroll */
+            min-width: 65px;
+        }
+
+        .tab-btn:hover { color: var(--primary); background: rgba(79, 70, 229, 0.1); }
+        .tab-btn.active { color: #fff; background: linear-gradient(135deg, var(--primary), var(--info)); box-shadow: var(--shadow-glow); }
+
+        /* Typography Gradients */
+        .text-gradient {
+            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        /* Forms & Inputs */
+        .form-group { margin-bottom: 1rem; width: 100%; }
+        .form-label { display: block; font-weight: 600; margin-bottom: 0.4rem; color: var(--text-main); font-size: 0.9rem; }
+        @media (min-width: 768px) { .form-label { font-size: 1rem; } }
+
+        .form-control {
+            width: 100%; padding: 0.65rem 0.85rem; font-family: inherit; font-size: 0.95rem; font-weight: 500;
+            background: rgba(255,255,255,0.7); color: var(--text-main);
+            border: 1px solid var(--border-color); border-radius: 0.75rem;
+            outline: none; transition: border-color 0.3s; box-sizing: border-box;
+        }
+        .dark .form-control { background: rgba(0,0,0,0.3); }
+        .form-control:focus { border-color: var(--primary); }
+        textarea.form-control { resize: vertical; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            padding: 0.65rem 1.2rem; font-family: inherit; font-size: 0.95rem; font-weight: 700;
+            border: none; border-radius: 0.75rem; cursor: pointer; transition: transform 0.2s, opacity 0.2s;
+            white-space: nowrap; flex-shrink: 0;
+        }
+        @media (min-width: 768px) { .btn { padding: 0.75rem 1.5rem; font-size: 1rem; } }
+        
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-primary { background: linear-gradient(to right, var(--primary), var(--info)); color: #fff; box-shadow: var(--shadow-glow); }
+        .btn-success { background: linear-gradient(to right, var(--success), #059669); color: #fff; }
+        .btn-warning { background: linear-gradient(to right, var(--warning), #d97706); color: #000; }
+        .btn-danger-bg { background: linear-gradient(to right, var(--danger), #be123c); color: #fff; }
+        .btn-secondary { background: linear-gradient(to right, #8b5cf6, var(--secondary)); color: #fff; }
+        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
+        
+        .btn-icon {
+            padding: 0.4rem; border: none; background: rgba(128,128,128,0.1); border-radius: 0.5rem;
+            cursor: pointer; color: inherit; display: inline-flex; align-items: center; justify-content: center;
+        }
+        @media (min-width: 768px) { .btn-icon { padding: 0.5rem; } }
+        .dark .btn-icon { background: rgba(255,255,255,0.05); }
+        .btn-icon:hover { background: var(--border-color); }
+
+        /* Tables */
+        .table-wrapper { 
+            width: 100%; max-width: 100vw; overflow-x: auto; margin-top: 1rem; 
+            border-radius: 1rem; border: 1px solid var(--border-color); background: rgba(255,255,255,0.3); 
+            -webkit-overflow-scrolling: touch; /* Smooth scroll di iOS */
+        }
+        .dark .table-wrapper { background: rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; }
+        @media (min-width: 768px) { th, td { padding: 1rem; font-size: 0.95rem; } }
+        
+        th { background: rgba(128,128,128,0.05); font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border-color); }
+        .dark th { background: rgba(255,255,255,0.02); }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(128,128,128,0.05); }
+        .dark tr:hover td { background: rgba(255,255,255,0.01); }
+
+        .badge { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
+        @media (min-width: 768px) { .badge { padding: 0.25rem 0.75rem; font-size: 0.85rem; } }
+
+        /* Modals */
+        .modal {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1000;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            display: none; align-items: center; justify-content: center; padding: 1rem;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--bg-gradient); width: 95%; max-width: 800px;
+            max-height: 90vh; overflow-y: auto; border-radius: 1.25rem; padding: 1.25rem;
+            border: 1px solid var(--glass-border); position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            animation: slideUp 0.3s ease-out;
+        }
+        @media (min-width: 768px) {
+            .modal-content { padding: 2rem; border-radius: 1.5rem; width: 100%; }
+        }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); }
+        @media (min-width: 768px) { .modal-header { margin-bottom: 1.5rem; padding-bottom: 1rem; } }
+
+        /* Icons Container */
+        .icon-box { width: 3rem; height: 3rem; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; }
+        @media (min-width: 768px) { .icon-box { width: 3.5rem; height: 3.5rem; border-radius: 1rem; } }
+        
+        .bg-gradient-primary { background: linear-gradient(135deg, var(--primary), var(--info)); }
+        .bg-gradient-danger { background: linear-gradient(135deg, var(--danger), #fb7185); }
+        .bg-gradient-warning { background: linear-gradient(135deg, var(--warning), #fbbf24); }
+        .bg-gradient-secondary { background: linear-gradient(135deg, #8b5cf6, var(--secondary)); }
+
+        .loader {
+            border: 3px solid rgba(128,128,128,0.2); border-radius: 50%; border-top: 3px solid var(--primary);
+            width: 24px; height: 24px; animation: spin 1s linear infinite; display: inline-block;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        
+        /* Action Bar Responsive Tweak */
+        .action-bar { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; }
+        @media (min-width: 768px) { .action-bar { flex-direction: row; align-items: center; width: auto; } }
+    </style>
+</head>
+<body class="dark">
+
+    <!-- LOGIN OVERLAY -->
+    <div id="login-overlay" class="modal active" style="z-index: 9999;">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="icon-box mx-auto mb-4" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); width: 4.5rem; height: 4.5rem;">
+                <i data-lucide="rocket" style="width: 2.2rem; height: 2.2rem;"></i>
+            </div>
+            <!-- Perbaikan Posisi Tengah Teks FusionDesk -->
+            <h2 class="text-3xl font-bold mb-2 w-full" style="display: block; text-align: center; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">FusionDesk</h2>
+            <p class="text-muted mb-6 text-sm md:text-base">Masuk ke ruang kerja premium Anda</p>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group" style="position: relative;">
+                    <i data-lucide="user" class="text-muted" style="position: absolute; left: 1rem; top: 0.75rem; width: 1.2rem;"></i>
+                    <input type="text" id="login-user" class="form-control" style="padding-left: 2.8rem;" required placeholder="Username">
+                </div>
+                <div class="form-group mb-6" style="position: relative;">
+                    <i data-lucide="lock" class="text-muted" style="position: absolute; left: 1rem; top: 0.75rem; width: 1.2rem;"></i>
+                    <input type="password" id="login-pass" class="form-control" style="padding-left: 2.8rem;" required placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary w-full text-lg"><i data-lucide="log-in"></i> Masuk</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container flex justify-between items-center w-full gap-4">
+            <div class="flex items-center gap-2">
+                <div class="icon-box" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); width: 2.2rem; height: 2.2rem; border-radius: 0.6rem;">
+                    <i data-lucide="rocket" style="width: 1.1rem;"></i>
+                </div>
+                <span class="text-xl md:text-2xl font-bold" style="background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">FusionDesk</span>
+            </div>
+            
+            <!-- Desktop Nav -->
+            <nav class="desktop-nav" id="main-nav-desktop">
+                <button onclick="switchTab('dashboard')" id="tab-dashboard-desktop" class="tab-btn active"><i data-lucide="layout-dashboard"></i> <span>Dashboard</span></button>
+                <button onclick="switchTab('worktracker')" id="tab-worktracker-desktop" class="tab-btn"><i data-lucide="list-todo"></i> <span>Tracker</span></button>
+                <button onclick="switchTab('sales')" id="tab-sales-desktop" class="tab-btn"><i data-lucide="shopping-cart"></i> <span>Sales</span></button>
+                <button onclick="switchTab('returned')" id="tab-returned-desktop" class="tab-btn"><i data-lucide="package-minus"></i> <span>Returned</span></button>
+                <button onclick="switchTab('products')" id="tab-products-desktop" class="tab-btn"><i data-lucide="package"></i> <span>Produk</span></button>
+                <button onclick="switchTab('accounts')" id="tab-accounts-desktop" class="tab-btn"><i data-lucide="users"></i> <span>Accounts</span></button>
+                <button onclick="switchTab('prompt')" id="tab-prompt-desktop" class="tab-btn"><i data-lucide="sparkles"></i> <span>Prompt AI</span></button>
+            </nav>
+
+            <div class="flex gap-2 items-center">
+                <button onclick="toggleTheme()" class="btn-icon" title="Ganti Tema"><i id="theme-icon" data-lucide="moon"></i></button>
+                <button onclick="logout()" class="btn-icon text-danger" style="background: rgba(225, 29, 72, 0.1);" title="Keluar"><i data-lucide="log-out"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container flex-grow">
+        
+        <!-- DASHBOARD (OVERVIEW STATS) -->
+        <div id="view-dashboard" class="block">
+            <h2 class="text-primary"><i data-lucide="pie-chart"></i> Overview Statistik</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
+                <!-- Tracker Stats Redesign -->
+                <div class="glass-card">
+                    <h3 class="mb-4 flex items-center gap-2"><i data-lucide="list-todo" class="text-primary"></i> Work Tracker</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="glass-card p-3" style="background: rgba(79, 70, 229, 0.05); grid-column: span 2;">
+                            <p class="text-primary text-xs md:text-sm font-bold mb-1">Total Pekerjaan</p>
+                            <p class="text-2xl md:text-3xl font-bold" id="stat-total">0</p>
+                        </div>
+                        <div class="glass-card p-3" style="background: rgba(16, 185, 129, 0.05);">
+                            <p class="text-success text-xs md:text-sm font-bold mb-1">Selesai (Video)</p>
+                            <p class="text-xl md:text-2xl font-bold" id="stat-completed">0</p>
+                        </div>
+                        <div class="glass-card p-3" style="background: rgba(245, 158, 11, 0.05);">
+                            <p class="text-warning text-xs md:text-sm font-bold mb-1">Pending</p>
+                            <p class="text-xl md:text-2xl font-bold" id="stat-pending">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sales Stats Redesign (Hari Ini, Minggu Ini, Bulan Ini) -->
+                <div class="glass-card">
+                    <h3 class="mb-4 flex items-center gap-2"><i data-lucide="shopping-cart" class="text-success"></i> Penjualan</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="glass-card p-3" style="background: rgba(245, 158, 11, 0.05); grid-column: span 2;">
+                            <p class="text-warning text-xs md:text-sm font-bold mb-1">Bulan Ini</p>
+                            <p class="text-2xl md:text-3xl font-bold" id="stat-sales-month-qty">0 Order</p>
+                            <p class="text-lg md:text-xl font-bold text-muted" id="stat-sales-month-rev">Rp 0</p>
+                        </div>
+                        <div class="glass-card p-3" style="background: rgba(14, 165, 233, 0.05);">
+                            <p class="text-info text-xs md:text-sm font-bold mb-1">Minggu Ini</p>
+                            <p class="text-lg md:text-2xl font-bold" id="stat-sales-week-qty">0 Order</p>
+                            <p class="text-sm md:text-lg font-bold text-muted" id="stat-sales-week-rev">Rp 0</p>
+                        </div>
+                        <div class="glass-card p-3" style="background: rgba(16, 185, 129, 0.05);">
+                            <p class="text-success text-xs md:text-sm font-bold mb-1">Hari Ini</p>
+                            <p class="text-lg md:text-2xl font-bold" id="stat-sales-today-qty">0 Order</p>
+                            <p class="text-sm md:text-lg font-bold text-muted" id="stat-sales-today-rev">Rp 0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <div class="glass-card flex items-center gap-4">
+                    <div class="icon-box bg-gradient-secondary"><i data-lucide="users"></i></div>
+                    <div><p class="text-muted text-xs md:text-sm font-bold">Total Akun</p><p class="text-xl md:text-2xl font-bold" id="stat-acc-total">0</p></div>
+                </div>
+                <div class="glass-card flex items-center gap-4">
+                    <div class="icon-box bg-gradient-danger"><i data-lucide="shield-alert"></i></div>
+                    <div><p class="text-muted text-xs md:text-sm font-bold">Terkunci (2FA)</p><p class="text-xl md:text-2xl font-bold" id="stat-acc-2fa">0</p></div>
+                </div>
+                <div class="glass-card flex items-center gap-4">
+                    <div class="icon-box bg-gradient-warning"><i data-lucide="sparkles"></i></div>
+                    <div><p class="text-muted text-xs md:text-sm font-bold">Database Prompt</p><p class="text-xl md:text-2xl font-bold" id="stat-prompt-total">0</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WORK TRACKER VIEW -->
+        <div id="view-worktracker" class="hidden">
+            <div class="glass-card flex flex-col">
+                <div class="flex flex-col lg:flex-row justify-between lg:items-center gap-4 mb-4">
+                    <h2 class="text-primary w-full"><i data-lucide="list-todo"></i> Daftar Pekerjaan</h2>
+                    <div class="action-bar">
+                        <input type="text" id="search-filter" oninput="applyJobFilter()" placeholder="Cari pekerjaan..." class="form-control w-full md:w-auto">
+                        <select id="status-filter" onchange="applyJobFilter()" class="form-control w-full md:w-auto">
+                            <option value="ALL">Semua Status</option><option value="SELESAI">Selesai Edit</option><option value="PENDING">Pending Edit</option>
+                        </select>
+                        <div class="flex flex-wrap gap-2 w-full md-w-auto">
+                            <button onclick="openJobModal()" class="btn btn-primary flex-1"><i data-lucide="plus"></i> Tambah</button>
+                            <button onclick="loadJobsData()" class="btn-icon" style="background: var(--border-color);"><i data-lucide="refresh-cw"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Job Name</th><th>Linimasa</th><th>SB</th><th>PIC</th><th>Status</th><th>Links</th><th class="text-right">Aksi</th></tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <tr><td colspan="7" class="text-center text-muted p-6"><div class="loader"></div> Memuat data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SALES VIEW -->
+        <div id="view-sales" class="hidden">
+            <div class="glass-card flex flex-col">
+                <div class="flex flex-col lg:flex-row justify-between lg:items-center gap-4 mb-4">
+                    <h2 class="text-success w-full"><i data-lucide="shopping-cart"></i> Data Penjualan</h2>
+                    <div class="action-bar">
+                        <input type="text" id="sales-search-filter" oninput="applySalesFilter()" placeholder="Cari pesanan/resi..." class="form-control w-full md:w-auto">
+                        <select id="sales-status-filter" onchange="applySalesFilter()" class="form-control w-full md:w-auto">
+                            <option value="ALL">Semua</option><option value="Completed">Completed</option><option value="Shipped">Shipped</option><option value="Processing">Processing</option><option value="Pending">Pending</option><option value="Returned">Returned</option><option value="Failed COD">Failed COD</option>
+                        </select>
+                        <div class="flex flex-wrap gap-2 w-full md-w-auto justify-end">
+                            <button onclick="exportSalesCSV()" class="btn btn-outline flex-1 md:flex-none"><i data-lucide="download"></i> CSV</button>
+                            <button onclick="openSalesModal()" class="btn btn-success flex-1 md:flex-none"><i data-lucide="plus"></i> Tambah</button>
+                            <button onclick="loadSalesData()" class="btn-icon" style="background: var(--border-color);"><i data-lucide="refresh-cw"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Tgl / Resi</th><th>Marketplace</th><th>Customer</th><th>Product (Qty)</th><th>Total Harga</th><th>Status</th><th class="text-right">Aksi</th></tr>
+                        </thead>
+                        <tbody id="sales-table-body">
+                            <tr><td colspan="7" class="text-center text-muted p-6"><div class="loader"></div> Memuat data penjualan...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- RETURNED VIEW -->
+        <div id="view-returned" class="hidden">
+            <div class="glass-card flex flex-col">
+                <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4">
+                    <h2 class="text-danger w-full"><i data-lucide="package-minus"></i> Data Retur</h2>
+                    <div class="action-bar">
+                        <div class="flex gap-2 w-full md-w-auto justify-end">
+                            <button onclick="openReturnedModal()" class="btn btn-danger-bg flex-1 md:flex-none"><i data-lucide="plus"></i> Tambah Retur</button>
+                            <button onclick="loadReturnedData()" class="btn-icon" style="background: var(--border-color);"><i data-lucide="refresh-cw"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Tgl Retur</th><th>Resi</th><th>Customer</th><th>Product</th><th>Gudang</th><th>Bukti Foto</th><th class="text-right">Aksi</th></tr>
+                        </thead>
+                        <tbody id="returned-table-body">
+                            <tr><td colspan="7" class="text-center text-muted p-6"><div class="loader"></div> Memuat data retur...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRODUCTS VIEW -->
+        <div id="view-products" class="hidden">
+            <div class="glass-card flex flex-col">
+                <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4">
+                    <h2 class="text-info w-full"><i data-lucide="package"></i> Kelola Produk</h2>
+                    <div class="action-bar">
+                        <div class="flex gap-2 w-full md-w-auto justify-end">
+                            <button onclick="openProductModal()" class="btn btn-primary flex-1 md:flex-none" style="background: var(--info);"><i data-lucide="plus"></i> Tambah Produk</button>
+                            <button onclick="loadProductsData()" class="btn-icon" style="background: var(--border-color);"><i data-lucide="refresh-cw"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Nama Produk</th><th>SKU</th><th>Harga Satuan</th><th>Grosir (2-3)</th><th>Grosir (4-8)</th><th>Fee</th><th class="text-right">Aksi</th></tr>
+                        </thead>
+                        <tbody id="product-table-body">
+                            <tr><td colspan="7" class="text-center text-muted p-6"><div class="loader"></div> Memuat data produk...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACCOUNTS VIEW -->
+        <div id="view-accounts" class="hidden">
+            <div class="glass-card flex flex-col">
+                <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4">
+                    <h2 class="text-secondary w-full"><i data-lucide="users"></i> Kelola Akun</h2>
+                    <div class="action-bar">
+                        <div class="flex gap-2 w-full md-w-auto justify-end">
+                            <button onclick="openAccountModal()" class="btn btn-secondary flex-1 md:flex-none"><i data-lucide="plus"></i> Tambah Akun</button>
+                            <button onclick="loadAccountsData()" class="btn-icon" style="background: var(--border-color);"><i data-lucide="refresh-cw"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr><th>Platform / Tgl</th><th>Email</th><th>Password</th><th>2FA</th><th class="text-right">Aksi</th></tr>
+                        </thead>
+                        <tbody id="acc-table-body">
+                            <tr><td colspan="5" class="text-center text-muted p-6"><div class="loader"></div> Memuat data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROMPT VIEW -->
+        <div id="view-prompt" class="hidden">
+            <div class="glass-card flex flex-col">
+                <div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6">
+                    <h2 class="text-warning w-full"><i data-lucide="sparkles"></i> Database Prompt</h2>
+                    <div class="action-bar">
+                        <div class="flex gap-2 w-full md-w-auto justify-end">
+                            <button onclick="openAddPrompt()" class="btn btn-warning flex-1 md:flex-none" style="color:#000;"><i data-lucide="plus"></i> Tambah Prompt</button>
+                            <button onclick="loadPromptData()" class="btn-icon" style="background: var(--border-color);"><i data-lucide="refresh-cw"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6" id="prompt-cards-container">
+                    <div class="text-center text-muted" style="grid-column: span 3;"><div class="loader"></div> Memuat data...</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MOBILE BOTTOM APP BAR -->
+    <nav class="mobile-nav" id="main-nav-mobile">
+        <button onclick="switchTab('dashboard')" id="tab-dashboard-mobile" class="tab-btn active">
+            <i data-lucide="layout-dashboard" style="width: 20px; height: 20px;"></i>
+            <span>Dash</span>
+        </button>
+        <button onclick="switchTab('worktracker')" id="tab-worktracker-mobile" class="tab-btn">
+            <i data-lucide="list-todo" style="width: 20px; height: 20px;"></i>
+            <span>Tracker</span>
+        </button>
+        <button onclick="switchTab('sales')" id="tab-sales-mobile" class="tab-btn">
+            <i data-lucide="shopping-cart" style="width: 20px; height: 20px;"></i>
+            <span>Sales</span>
+        </button>
+        <button onclick="switchTab('returned')" id="tab-returned-mobile" class="tab-btn">
+            <i data-lucide="package-minus" style="width: 20px; height: 20px;"></i>
+            <span>Retur</span>
+        </button>
+        <button onclick="switchTab('products')" id="tab-products-mobile" class="tab-btn">
+            <i data-lucide="package" style="width: 20px; height: 20px;"></i>
+            <span>Produk</span>
+        </button>
+        <button onclick="switchTab('accounts')" id="tab-accounts-mobile" class="tab-btn">
+            <i data-lucide="users" style="width: 20px; height: 20px;"></i>
+            <span>Akun</span>
+        </button>
+        <button onclick="switchTab('prompt')" id="tab-prompt-mobile" class="tab-btn">
+            <i data-lucide="sparkles" style="width: 20px; height: 20px;"></i>
+            <span>Prompt</span>
+        </button>
+    </nav>
+
+    <!-- MODAL JOB -->
+    <div id="modal-job" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="form-job-title" class="text-xl md:text-2xl font-bold text-gradient">Input Pekerjaan</h2>
+                <button type="button" onclick="closeJobModal()" class="btn-icon"><i data-lucide="x"></i></button>
+            </div>
+            <form id="jobForm" onsubmit="submitJobForm(event)">
+                <input type="hidden" id="edit-row-id" value="">
+                <div class="glass-card mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group"><label class="form-label">Nama Pekerjaan</label><input type="text" id="inp-job" required class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Created</label><input type="date" id="inp-created" required class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Schedule</label><input type="date" id="inp-schedule" required class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Published</label><input type="date" id="inp-published" required class="form-control"></div>
+                    </div>
+                </div>
+                <div class="glass-card mb-4">
+                    <label class="form-label flex items-center gap-2"><i data-lucide="image" class="text-secondary"></i> Storyboard</label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <input type="file" id="inp-scene1" accept="image/*,.pdf" class="form-control" style="padding: 0.5rem;">
+                        <input type="file" id="inp-scene2" accept="image/*,.pdf" class="form-control" style="padding: 0.5rem;">
+                        <input type="file" id="inp-scene3" accept="image/*,.pdf" class="form-control" style="padding: 0.5rem;">
+                    </div>
+                </div>
+                <div class="glass-card mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label">Create Video (PIC)</label><input list="createVideo-options" id="inp-createVideo" class="form-control"><datalist id="createVideo-options"></datalist></div>
+                        <div class="form-group"><label class="form-label">Download</label><select id="inp-download" class="form-control"><option value="BELUM">BELUM</option><option value="SUDAH">SUDAH</option></select></div>
+                        <div class="form-group"><label class="form-label">Edit</label><select id="inp-edit" class="form-control"><option value="BELUM">BELUM</option><option value="SUDAH">SUDAH</option></select></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-color pt-4">
+                        <input type="url" id="inp-fb" class="form-control" placeholder="Facebook URL">
+                        <input type="url" id="inp-tiktok" class="form-control" placeholder="TikTok URL">
+                        <input type="url" id="inp-youtube" class="form-control" placeholder="YouTube URL">
+                        <input type="url" id="inp-blogspot" class="form-control" placeholder="Blogspot URL">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 flex-col md:flex-row">
+                    <button type="button" onclick="closeJobModal()" class="btn btn-outline w-full md:w-auto justify-center">Batal</button>
+                    <button type="submit" id="btn-submit-job" class="btn btn-primary w-full md:w-auto justify-center"><i data-lucide="save"></i> Simpan Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL SALES -->
+    <div id="modal-sales" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="form-sales-title" class="text-xl md:text-2xl font-bold text-success">Input Penjualan</h2>
+                <button type="button" onclick="closeSalesModal()" class="btn-icon"><i data-lucide="x"></i></button>
+            </div>
+            <form id="salesForm" onsubmit="submitSalesForm(event)">
+                <input type="hidden" id="sales-row-id" value="">
+                <div class="glass-card mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label">Tanggal</label><input type="date" id="inp-sales-date" required class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Gudang</label><input list="gudang-sales-list" id="inp-sales-gudang" required class="form-control"><datalist id="gudang-sales-list"><option value="Gudang Majenang"><option value="Gudang Jakarta"></datalist></div>
+                        <div class="form-group"><label class="form-label">Kurir</label><input list="kurir-sales-list" id="inp-sales-kurir" required class="form-control"><datalist id="kurir-sales-list"><option value="J&T"><option value="JNE"><option value="TIKI"><option value="Instan"><option value="Sameday"></datalist></div>
+                        <div class="form-group"><label class="form-label text-success flex items-center gap-1"><i data-lucide="truck"></i> No. Resi</label><input type="text" id="inp-sales-resi" oninput="checkResiStatus()" class="form-control" placeholder="Otomatis Shipped"></div>
+                    </div>
+                </div>
+                <div class="glass-card mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label">Marketplace</label><input list="market-list" id="inp-sales-market" required class="form-control"><datalist id="market-list"><option value="Shopee"><option value="Tokopedia"><option value="Lazada"><option value="TikTok Shop"><option value="WhatsApp"></datalist></div>
+                        <div class="form-group"><label class="form-label">Nama Customer</label><input type="text" id="inp-sales-name" required class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Nomor HP</label><input type="text" id="inp-sales-phone" required class="form-control"></div>
+                    </div>
+                    <div class="grid grid-cols-1 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label">Alamat Lengkap</label><textarea id="inp-sales-address" rows="2" required class="form-control"></textarea></div>
+                    </div>
+                </div>
+                <div class="glass-card mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="form-group"><label class="form-label">Product</label><select id="inp-sales-product" required class="form-control"><option value="">Pilih Produk...</option></select></div>
+                        <div class="form-group"><label class="form-label">Quantity</label><input type="number" id="inp-sales-qty" required class="form-control" min="1" value="1"></div>
+                        <div class="form-group"><label class="form-label">Harga Total</label><input type="number" id="inp-sales-price" required class="form-control text-success font-bold"></div>
+                        <div class="form-group">
+                            <label class="form-label">Status Pesanan</label>
+                            <select id="inp-sales-status" required class="form-control font-bold">
+                                <option value="Pending">Pending</option><option value="Processing">Processing</option><option value="Shipped">Shipped</option><option value="Completed">Completed</option><option value="Returned">Returned</option><option value="Failed COD">Failed COD</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 flex-col md:flex-row">
+                    <button type="button" onclick="closeSalesModal()" class="btn btn-outline w-full md:w-auto justify-center">Batal</button>
+                    <button type="submit" class="btn btn-success w-full md:w-auto justify-center"><i data-lucide="save"></i> Simpan Penjualan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL RETURNED -->
+    <div id="modal-returned" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2 class="text-xl md:text-2xl font-bold text-danger flex items-center gap-2"><i data-lucide="corner-down-left"></i> Retur Penjualan</h2>
+                <button type="button" onclick="closeReturnedModal()" class="btn-icon"><i data-lucide="x"></i></button>
+            </div>
+            <form id="returnedForm" onsubmit="submitReturnedForm(event)">
+                <input type="hidden" id="retur-sales-row-id" value="">
+                
+                <div class="glass-card mb-4" style="background: rgba(79, 70, 229, 0.05); border-color: rgba(79, 70, 229, 0.2);">
+                    <div class="form-group mb-0">
+                        <label class="form-label text-primary flex items-center gap-1"><i data-lucide="search" style="width: 1.2rem;"></i> Cari Transaksi Penjualan</label>
+                        <select id="inp-retur-select-sales" class="form-control" onchange="autoFillReturFromSales()" required>
+                            <option value="">-- Pilih Transaksi Penjualan --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="glass-card mb-4">
+                    <p class="text-sm font-bold text-muted mb-2">Informasi Pesanan Asli</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label">Tgl Order</label><input type="date" id="inp-retur-tanggal" required class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                        <div class="form-group"><label class="form-label text-danger flex items-center gap-1"><i data-lucide="truck"></i> No. Resi</label><input type="text" id="inp-retur-resi" class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                        <div class="form-group"><label class="form-label">Marketplace</label><input type="text" id="inp-retur-marketplace" required class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label">Nama Customer</label><input type="text" id="inp-retur-name" required class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                        <div class="form-group"><label class="form-label">Nomor HP</label><input type="text" id="inp-retur-phone" required class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                        <div class="form-group md:col-span-2"><label class="form-label">Alamat Lengkap</label><textarea id="inp-retur-address" rows="2" class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></textarea></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="form-group"><label class="form-label">Product</label><input type="text" id="inp-retur-product" required class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                        <div class="form-group"><label class="form-label">Quantity</label><input type="number" id="inp-retur-qty" required class="form-control" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                        <div class="form-group"><label class="form-label">Harga Total</label><input type="number" id="inp-retur-harga" required class="form-control text-danger font-bold" readonly style="opacity: 0.7; pointer-events: none;"></div>
+                    </div>
+                </div>
+
+                <div class="glass-card mb-6" style="background: rgba(225, 29, 72, 0.05); border-color: rgba(225, 29, 72, 0.2);">
+                    <p class="text-sm font-bold text-danger mb-2">Detail Retur</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="form-group"><label class="form-label">Tgl Returned</label><input type="date" id="inp-retur-tgl" required class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Gudang</label><input list="gudang-list" id="inp-retur-gudang" required class="form-control"><datalist id="gudang-list"><option value="Gudang Majenang"><option value="Gudang Jakarta"></datalist></div>
+                        <div class="form-group"><label class="form-label">Bukti Foto</label><input type="file" id="inp-retur-foto" accept="image/*" class="form-control" style="padding: 0.5rem;" required></div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2 flex-col md:flex-row">
+                    <button type="button" onclick="closeReturnedModal()" class="btn btn-outline w-full md:w-auto justify-center">Batal</button>
+                    <button type="submit" class="btn btn-danger-bg w-full md:w-auto justify-center"><i data-lucide="save"></i> Simpan Retur</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL PRODUCT -->
+    <div id="modal-product" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 class="text-xl md:text-2xl font-bold text-info flex items-center gap-2"><i data-lucide="package-plus"></i> Form Produk</h2>
+                <button type="button" onclick="closeProductModal()" class="btn-icon"><i data-lucide="x"></i></button>
+            </div>
+            <form id="productForm" onsubmit="submitProductForm(event)">
+                <input type="hidden" id="prod-row-id" value="">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="form-group"><label class="form-label">Nama Produk</label><input type="text" id="inp-prod-name" required class="form-control"></div>
+                    <div class="form-group"><label class="form-label">SKU</label><input type="text" id="inp-prod-sku" required class="form-control"></div>
+                </div>
+                <div class="glass-card mb-6" style="background: rgba(14, 165, 233, 0.05); border-color: rgba(14, 165, 233, 0.2);">
+                    <p class="text-sm font-bold text-info mb-2">Pengaturan Harga</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="form-group"><label class="form-label text-success">Satuan (Rp)</label><input type="number" id="inp-prod-price" required class="form-control font-bold"></div>
+                        <div class="form-group"><label class="form-label">Grosir 2-3 (Rp)</label><input type="number" id="inp-prod-grosir23" class="form-control" placeholder="Opsional"></div>
+                        <div class="form-group"><label class="form-label">Grosir 4-8 (Rp)</label><input type="number" id="inp-prod-grosir48" class="form-control" placeholder="Opsional"></div>
+                    </div>
+                    <div class="form-group mb-0"><label class="form-label text-warning">Fee (Rp)</label><input type="number" id="inp-prod-fee" required class="form-control"></div>
+                </div>
+                <div class="flex justify-end gap-2 flex-col md:flex-row">
+                    <button type="button" onclick="closeProductModal()" class="btn btn-outline w-full md:w-auto justify-center">Batal</button>
+                    <button type="submit" class="btn btn-primary w-full md:w-auto justify-center" style="background: var(--info);"><i data-lucide="save"></i> Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL ACCOUNT -->
+    <div id="modal-account" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 id="modal-account-title" class="text-xl md:text-2xl font-bold text-secondary flex items-center gap-2"><i data-lucide="user-plus"></i> Tambah Akun</h2>
+                <button type="button" onclick="closeAccountModal()" class="btn-icon"><i data-lucide="x"></i></button>
+            </div>
+            <form id="form-account" onsubmit="submitAccountForm(event)">
+                <input type="hidden" id="acc-row-id" value="">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="form-group"><label class="form-label">Date Created</label><input type="date" id="inp-acc-created" required class="form-control"></div>
+                    <div class="form-group"><label class="form-label">Platform</label><input list="platform-options" id="inp-acc-platform" required class="form-control"><datalist id="platform-options"><option value="Gmail"><option value="TikTok"><option value="Facebook"><option value="Instagram"><option value="YouTube"></datalist></div>
+                </div>
+                <div class="form-group"><label class="form-label">Email / Username</label><input type="text" id="inp-acc-email" required class="form-control"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="form-group"><label class="form-label">Password</label><input type="text" id="inp-acc-password" required class="form-control"></div>
+                    <div class="form-group"><label class="form-label">2FA / Auth</label><input type="text" id="inp-acc-twofa" class="form-control" placeholder="Opsional"></div>
+                </div>
+                <div class="form-group mb-6"><label class="form-label">Phone Number</label><input type="text" id="inp-acc-phone" class="form-control" placeholder="Opsional"></div>
+                <div class="flex justify-end gap-2 flex-col md:flex-row">
+                    <button type="button" onclick="closeAccountModal()" class="btn btn-outline w-full md:w-auto justify-center">Batal</button>
+                    <button type="submit" class="btn btn-secondary w-full md:w-auto justify-center"><i data-lucide="save"></i> Simpan Akun</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL PROMPT -->
+    <div id="modal-prompt" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 id="modal-prompt-title" class="text-xl md:text-2xl font-bold text-warning flex items-center gap-2"><i data-lucide="wand-2"></i> Tambah Prompt</h2>
+                <button type="button" onclick="closePromptModal()" class="btn-icon"><i data-lucide="x"></i></button>
+            </div>
+            <form id="form-prompt" onsubmit="submitPromptForm(event)">
+                <input type="hidden" id="prompt-row-id" value="">
+                <div class="form-group"><label class="form-label">Nama Prompt</label><input type="text" id="inp-prompt-nama" required class="form-control"></div>
+                <div class="form-group mb-6"><label class="form-label">Isi Prompt</label><textarea id="inp-prompt-isi" required rows="5" class="form-control"></textarea></div>
+                <div class="flex justify-end gap-2 flex-col md:flex-row">
+                    <button type="button" onclick="closePromptModal()" class="btn btn-outline w-full md:w-auto justify-center">Batal</button>
+                    <button type="submit" class="btn btn-warning w-full md:w-auto justify-center" style="color: #000;"><i data-lucide="save"></i> Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CORE SCRIPTS -->
+    <script>
+        // Init Lucide
+        lucide.createIcons();
+
+        // Data Storage
+        let globalJobsData=[], globalPromptsData=[], globalAccountsData=[], globalSalesData=[], globalProductsData=[], globalReturnedData=[];
+
+        // Theme
+        const themeIcon = document.getElementById('theme-icon');
+        let currentTheme = localStorage.getItem('theme') || 'dark';
+        function applyTheme(t) { 
+            const d = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches); 
+            d ? document.body.classList.add('dark') : document.body.classList.remove('dark'); 
+            if(themeIcon) themeIcon.setAttribute('data-lucide', d ? 'moon' : 'sun');
+            lucide.createIcons();
+        }
+        function toggleTheme() { 
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light'; 
+            localStorage.setItem('theme', currentTheme); 
+            applyTheme(currentTheme); 
+        }
+        
+        // --- AUTH LOGIC (Backend Connected) ---
+        function checkLogin() { 
+            if (sessionStorage.getItem('isLoggedIn') === 'true') { 
+                document.getElementById('login-overlay').classList.remove('active'); 
+                document.body.style.overflow = 'auto'; 
+            } else { 
+                document.body.style.overflow = 'hidden'; 
+            } 
+        }
+
+        function handleLogin(e) { 
+            e.preventDefault(); 
+            const u = document.getElementById('login-user').value;
+            const p = document.getElementById('login-pass').value;
+
+            Swal.fire({ title: 'Memverifikasi Akses...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+            const localLogin = () => {
+                if (u === 'admin' && p === '242527') {
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    Swal.close();
+                    document.getElementById('login-overlay').classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Akses Ditolak', text: 'Username atau password salah!' });
+                }
+            };
+
+            if(typeof google !== 'undefined') {
+                google.script.run
+                    .withSuccessHandler(res => {
+                        if(res && res.status === 'success') {
+                            sessionStorage.setItem('isLoggedIn', 'true');
+                            sessionStorage.setItem('authToken', res.token);
+                            Swal.close();
+                            document.getElementById('login-overlay').classList.remove('active'); 
+                            document.body.style.overflow = 'auto';
+                        } else if (res && res.status === 'error') {
+                            Swal.fire({ icon: 'error', title: 'Akses Ditolak', text: res.message });
+                        } else {
+                            localLogin();
+                        }
+                    })
+                    .withFailureHandler(err => {
+                        console.warn('Backend login gagal, menggunakan login lokal.', err);
+                        localLogin();
+                    })
+                    .prosesLogin(u, p);
+            } else {
+                localLogin();
+            }
+        }
+        
+        function logout() { 
+            sessionStorage.removeItem('isLoggedIn'); 
+            sessionStorage.removeItem('authToken');
+            location.reload(); 
+        }
+
+        // Tabs Mobile/Desktop Sync
+        function switchTab(tab) {
+            ['dashboard', 'worktracker', 'sales', 'returned', 'products', 'accounts', 'prompt'].forEach(t => {
+                const view = document.getElementById('view-' + t);
+                if(view) view.classList.toggle('hidden', t !== tab);
+                
+                const elDesktop = document.getElementById('tab-' + t + '-desktop');
+                if(elDesktop) { if(t === tab) elDesktop.classList.add('active'); else elDesktop.classList.remove('active'); }
+                
+                const elMobile = document.getElementById('tab-' + t + '-mobile');
+                if(elMobile) { if(t === tab) elMobile.classList.add('active'); else elMobile.classList.remove('active'); }
+            });
+
+            if(tab==='dashboard') { loadJobsData(); loadSalesData(); loadAccountsData(); loadPromptData(); loadProductsData(); loadReturnedData(); }
+            if(tab==='worktracker') loadJobsData(); 
+            if(tab==='sales') loadSalesData(); 
+            if(tab==='returned') loadReturnedData(); 
+            if(tab==='products') loadProductsData(); 
+            if(tab==='accounts') loadAccountsData(); 
+            if(tab==='prompt') loadPromptData();
+            setTimeout(() => lucide.createIcons(), 50);
+            window.scrollTo(0,0);
+        }
+
+        // Global Copy Helper
+        function copyText(text, label) {
+            if (!text || text === '-') return;
+            const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `${label} disalin!`, showConfirmButton: false, timer: 1500 });
+        }
+
+        function copyAccountData(rowId, field) {
+            const acc = globalAccountsData.find(a => a.row === rowId);
+            if(acc && acc[field]) copyText(String(acc[field]), field.toUpperCase());
+        }
+        function copyPromptDataText(rowId) {
+            const p = globalPromptsData.find(x => x.row === rowId);
+            if(p && p.prompt) copyText(String(p.prompt), 'Prompt');
+        }
+
+        // Function untuk fitur Copy data Sales (Dengan SKU)
+        function copyFormatSales(id) {
+            const s = globalSalesData.find(x => x.row === id);
+            if (!s) return;
+            
+            // Konversi ke String() dulu sebelum di-trim agar resi yang murni angka tidak crash
+            const resi = (s.resi && String(s.resi).trim() !== '') ? s.resi : '-';
+            const gudang = s.gudang || '-';
+            const kurir = s.kurir || '-';
+            
+            // Cari SKU dari globalProductsData berdasarkan nama produk di sales
+            const prodObj = globalProductsData.find(p => p.name === s.product);
+            const sku = (prodObj && prodObj.sku) ? prodObj.sku : s.product;
+            
+            const textToCopy = `${gudang}\n\n${s.name}\n${s.phone}\n${s.address}\n\n${sku} x ${s.qty || 1}\n\n${kurir} : ${resi}\nEKO\n0822-4646-4949`;
+            copyText(textToCopy, 'Format Pengiriman');
+        }
+
+        // Base64 helper
+        const getB64 = (f) => new Promise((resolve, reject) => { if(!f) return resolve(null); const r = new FileReader(); r.readAsDataURL(f); r.onload = () => resolve({name:f.name, base64:r.result}); r.onerror = reject; });
+
+        // Populate Multiple Product Dropdowns
+        function populateProductDropdowns() {
+            const options = '<option value="">Pilih Produk...</option>' + globalProductsData.map(x => `<option value="${x.name}">${x.name}</option>`).join('');
+            const s1 = document.getElementById('inp-sales-product'); if(s1) s1.innerHTML = options;
+        }
+
+        // Logic Harga Grosir Otomatis (Dynamic Pricing)
+        function calculateDynamicPrice(prodName, qtyStr) {
+            const prod = globalProductsData.find(p => p.name === prodName);
+            if(!prod) return '';
+            
+            let unitPrice = parseInt(prod.price) || 0;
+            const q = parseInt(qtyStr) || 1;
+            
+            if (q >= 4 && prod.grosir48) {
+                unitPrice = parseInt(prod.grosir48);
+            } else if (q >= 2 && q <= 3 && prod.grosir23) {
+                unitPrice = parseInt(prod.grosir23);
+            }
+            
+            return unitPrice * q;
+        }
+
+        // Custom Inline SVGs
+        const iconFB = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>`;
+        const iconTikTok = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path><path d="M15 8a4 4 0 1 0 0-8c0 4.5-3.5 8-8 8"></path></svg>`;
+        const iconYT = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>`;
+        const iconBlog = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
+
+        // --- DASHBOARD & WORK TRACKER ---
+        function loadJobsData() {
+            if(typeof google !== 'undefined') {
+                google.script.run
+                    .withSuccessHandler((d) => { globalJobsData=d||[]; renderTable(d||[]); })
+                    .withFailureHandler(e => { console.error(e); document.getElementById('table-body').innerHTML = `<tr><td colspan="7" class="text-center p-6 text-danger font-bold"><i data-lucide="alert-circle" class="mx-auto mb-2"></i>Gagal memuat data. (Deploy Ulang Code.gs)</td></tr>`; lucide.createIcons(); })
+                    .getDashboardData();
+            } else setTimeout(() => { renderTable([]); }, 500);
+        }
+        function renderTable(data) {
+            const tbody = document.getElementById('table-body'); tbody.innerHTML = '';
+            let c=0, p=0; if(!data || data.length === 0){ tbody.innerHTML=`<tr><td colspan="7" class="text-center text-muted p-6">Belum ada data pekerjaan.</td></tr>`; updateJobStats(0,0,0); return; }
+            data.forEach(i => {
+                if(i.edit==='SUDAH') c++; else p++;
+                let sL=''; 
+                if(i.scene1) sL+=`<a href="${i.scene1}" target="_blank" class="badge" style="background: rgba(79,70,229,0.1); color: var(--primary);">1</a>`;
+                if(i.scene2) sL+=`<a href="${i.scene2}" target="_blank" class="badge" style="background: rgba(79,70,229,0.1); color: var(--primary);">2</a>`;
+                if(i.scene3) sL+=`<a href="${i.scene3}" target="_blank" class="badge" style="background: rgba(79,70,229,0.1); color: var(--primary);">3</a>`;
+                
+                let stat=`<div class="badge" style="background: rgba(0,0,0,0.05); margin-bottom: 2px;">DL: ${i.download}</div><br><div class="badge" style="background: rgba(0,0,0,0.05);">Ed: ${i.edit}</div>`;
+                
+                let pubLinks = '';
+                if(i.fb) pubLinks += `<a href="${i.fb}" target="_blank" class="btn-icon" style="color:#1877f2;" title="Facebook">${iconFB}</a>`;
+                if(i.tiktok) pubLinks += `<a href="${i.tiktok}" target="_blank" class="btn-icon" style="color:var(--text-main);" title="TikTok">${iconTikTok}</a>`;
+                if(i.youtube) pubLinks += `<a href="${i.youtube}" target="_blank" class="btn-icon" style="color:#ff0000;" title="YouTube">${iconYT}</a>`;
+                if(i.blogspot) pubLinks += `<a href="${i.blogspot}" target="_blank" class="btn-icon" style="color:#f59e0b;" title="Blogspot">${iconBlog}</a>`;
+                
+                tbody.innerHTML += `<tr>
+                    <td class="font-bold">${i.job}</td>
+                    <td class="text-sm text-muted">Buat: <span style="color:var(--text-main)">${i.created}</span><br>Pub: <span style="color:var(--text-main)">${i.published}</span></td>
+                    <td>${sL||'-'}</td>
+                    <td class="font-bold" style="color: var(--primary);">${i.createVideo}</td>
+                    <td>${stat}</td>
+                    <td><div class="flex flex-wrap gap-1">${pubLinks||'-'}</div></td>
+                    <td class="text-right">
+                        <div class="flex justify-end items-center gap-1 flex-wrap">
+                            <button onclick="editJob(${i.row})" class="btn-icon" style="color: var(--info);"><i data-lucide="edit-2"></i></button>
+                            <button onclick="deleteJob(${i.row})" class="btn-icon" style="color: var(--danger);"><i data-lucide="trash-2"></i></button>
+                        </div>
+                    </td>
+                </tr>`;
+            }); 
+            updateJobStats(data.length, c, p);
+            lucide.createIcons();
+        }
+        function updateJobStats(t, c, p) { 
+            if(document.getElementById('stat-total')) document.getElementById('stat-total').innerText=t; 
+            if(document.getElementById('stat-completed')) document.getElementById('stat-completed').innerText=c; 
+            if(document.getElementById('stat-pending')) document.getElementById('stat-pending').innerText=p; 
+        }
+        
+        function openJobModal() { document.getElementById('jobForm').reset(); document.getElementById('edit-row-id').value=''; document.getElementById('modal-job').classList.add('active'); }
+        function closeJobModal() { document.getElementById('modal-job').classList.remove('active'); }
+        function editJob(id) { 
+            const j = globalJobsData.find(x=>x.row===id); 
+            if(j){ 
+                document.getElementById('edit-row-id').value=id; document.getElementById('inp-job').value=j.job; document.getElementById('inp-created').value=j.created; document.getElementById('inp-schedule').value=j.schedule; document.getElementById('inp-published').value=j.published; document.getElementById('inp-createVideo').value=j.createVideo; document.getElementById('inp-download').value=j.download; document.getElementById('inp-edit').value=j.edit; document.getElementById('inp-fb').value=j.fb; document.getElementById('inp-tiktok').value=j.tiktok; document.getElementById('inp-youtube').value=j.youtube; document.getElementById('inp-blogspot').value=j.blogspot; 
+                document.getElementById('modal-job').classList.add('active'); 
+            } 
+        }
+
+        async function submitJobForm(e) { 
+            e.preventDefault(); const rowId = document.getElementById('edit-row-id').value;
+            Swal.fire({ title: 'Memproses...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+            try {
+                const [s1, s2, s3] = await Promise.all([getB64(document.getElementById('inp-scene1').files[0]), getB64(document.getElementById('inp-scene2').files[0]), getB64(document.getElementById('inp-scene3').files[0])]);
+                const payload = { rowId: rowId, job: document.getElementById('inp-job').value, created: document.getElementById('inp-created').value, schedule: document.getElementById('inp-schedule').value, published: document.getElementById('inp-published').value, createVideo: document.getElementById('inp-createVideo').value, download: document.getElementById('inp-download').value, edit: document.getElementById('inp-edit').value, fb: document.getElementById('inp-fb').value, tiktok: document.getElementById('inp-tiktok').value, youtube: document.getElementById('inp-youtube').value, blogspot: document.getElementById('inp-blogspot').value, scene1: s1 || {base64:null}, scene2: s2 || {base64:null}, scene3: s3 || {base64:null} };
+                if(typeof google !== 'undefined') rowId ? google.script.run.withSuccessHandler(onJSuc).updateJob(payload) : google.script.run.withSuccessHandler(onJSuc).saveJob(payload);
+                else setTimeout(() => onJSuc({message: 'Preview sukses'}), 1000);
+            } catch (err) { Swal.fire('Error', 'Error upload file', 'error'); }
+            function onJSuc(res) { closeJobModal(); Swal.fire({ title: 'Berhasil!', text: res.message, icon: 'success'}); loadJobsData(); }
+        }
+
+        function deleteJob(id) { 
+            Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#e11d48' }).then((res) => {
+                if (res.isConfirmed) {
+                    Swal.fire({ title: 'Menghapus...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() }});
+                    if(typeof google !== 'undefined') { google.script.run.withSuccessHandler(() => { loadJobsData(); Swal.fire('Terhapus!','','success'); }).deleteJob(id); }
+                }
+            }); 
+        }
+
+        function applyJobFilter() {
+            const s = document.getElementById('search-filter').value.toLowerCase(), f = document.getElementById('status-filter').value;
+            renderTable(globalJobsData.filter(i => {
+                const mS = (i.job && i.job.toLowerCase().includes(s)) || (i.createVideo && i.createVideo.toLowerCase().includes(s));
+                const mF = f === 'ALL' ? true : (f === 'SELESAI' ? i.edit === 'SUDAH' : i.edit !== 'SUDAH');
+                return mS && mF;
+            }));
+        }
+
+        // --- PRODUCTS LOGIC ---
+        function loadProductsData() {
+            if(typeof google !== 'undefined') {
+                google.script.run
+                    .withSuccessHandler(d => { 
+                        globalProductsData = d || []; 
+                        populateProductDropdowns();
+                        renderProductsTable(globalProductsData);
+                    })
+                    .withFailureHandler(e => {
+                        console.error('Gagal meload produk', e);
+                        document.getElementById('product-table-body').innerHTML = `<tr><td colspan="7" class="text-center p-6 text-danger font-bold"><i data-lucide="alert-circle" class="mx-auto mb-2"></i>Gagal memuat data produk. (Deploy Ulang Code.gs)</td></tr>`; 
+                        lucide.createIcons();
+                    }).getProductsData();
+            } else setTimeout(() => { renderProductsTable([]); }, 500);
+        }
+
+        function renderProductsTable(data) {
+            const tbody = document.getElementById('product-table-body'); tbody.innerHTML = '';
+            if(!data || data.length === 0){ tbody.innerHTML=`<tr><td colspan="7" class="text-center text-muted p-6">Belum ada data produk.</td></tr>`; return; }
+            data.forEach(i => {
+                const g23 = i.grosir23 ? `Rp ${Number(i.grosir23).toLocaleString('id-ID')}` : '-';
+                const g48 = i.grosir48 ? `Rp ${Number(i.grosir48).toLocaleString('id-ID')}` : '-';
+
+                tbody.innerHTML += `<tr>
+                    <td class="font-bold text-info">${i.name}</td>
+                    <td class="font-bold">${i.sku || '-'}</td>
+                    <td class="font-bold text-success">Rp ${Number(i.price||0).toLocaleString('id-ID')}</td>
+                    <td><span class="badge" style="background: rgba(14, 165, 233, 0.1); color: var(--info);">${g23}</span></td>
+                    <td><span class="badge" style="background: rgba(14, 165, 233, 0.1); color: var(--info);">${g48}</span></td>
+                    <td class="text-warning font-bold">Rp ${Number(i.fee||0).toLocaleString('id-ID')}</td>
+                    <td class="text-right">
+                        <div class="flex justify-end items-center gap-1 flex-wrap">
+                            <button onclick="editProduct(${i.row})" class="btn-icon text-info"><i data-lucide="edit-2"></i></button>
+                            <button onclick="deleteProduct(${i.row})" class="btn-icon text-danger"><i data-lucide="trash-2"></i></button>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+            lucide.createIcons();
+        }
+
+        function openProductModal() { 
+            document.getElementById('productForm').reset(); 
+            document.getElementById('prod-row-id').value=''; 
+            document.getElementById('modal-product').classList.add('active'); 
+        }
+        function closeProductModal() { document.getElementById('modal-product').classList.remove('active'); }
+
+        function submitProductForm(e) {
+            e.preventDefault(); 
+            const id = document.getElementById('prod-row-id').value;
+            const p = { 
+                rowId: id,
+                name: document.getElementById('inp-prod-name').value, 
+                sku: document.getElementById('inp-prod-sku').value, 
+                price: document.getElementById('inp-prod-price').value, 
+                fee: document.getElementById('inp-prod-fee').value,
+                grosir23: document.getElementById('inp-prod-grosir23').value || '',
+                grosir48: document.getElementById('inp-prod-grosir48').value || ''
+            };
+            Swal.fire({title:'Menyimpan...', didOpen:()=>Swal.showLoading()});
+            if(typeof google !== 'undefined') { 
+                if (id) {
+                    google.script.run.withSuccessHandler(res => { closeProductModal(); Swal.fire('Berhasil!', res.message, 'success'); loadProductsData(); loadSalesData(); }).updateProduct(p); 
+                } else {
+                    google.script.run.withSuccessHandler(res => { closeProductModal(); Swal.fire('Berhasil!', res.message, 'success'); loadProductsData(); loadSalesData(); }).saveProduct(p); 
+                }
+            } else setTimeout(() => { closeProductModal(); Swal.fire('Berhasil!', 'Mode Preview', 'success'); }, 1000);
+        }
+
+        function editProduct(id) {
+            const p = globalProductsData.find(x => x.row === id);
+            if (!p) return;
+            document.getElementById('prod-row-id').value = id;
+            document.getElementById('inp-prod-name').value = p.name;
+            document.getElementById('inp-prod-sku').value = p.sku || '';
+            document.getElementById('inp-prod-price').value = p.price;
+            document.getElementById('inp-prod-grosir23').value = p.grosir23 || '';
+            document.getElementById('inp-prod-grosir48').value = p.grosir48 || '';
+            document.getElementById('inp-prod-fee').value = p.fee;
+            document.getElementById('modal-product').classList.add('active');
+        }
+
+        function deleteProduct(id) {
+            Swal.fire({title:'Hapus Produk?', icon:'warning', showCancelButton:true, confirmButtonColor:'#e11d48'})
+            .then(r => {
+                if(r.isConfirmed){
+                    Swal.fire({title:'Menghapus...', allowOutsideClick: false, didOpen:()=>Swal.showLoading()});
+                    if(typeof google !== 'undefined') { 
+                        google.script.run.withSuccessHandler(() => { loadProductsData(); loadSalesData(); Swal.fire('Terhapus!','','success'); }).deleteProduct(id); 
+                    }
+                }
+            });
+        }
+
+
+        // --- SALES LOGIC ---
+        function loadSalesData() {
+            if(typeof google !== 'undefined') {
+                google.script.run
+                    .withSuccessHandler(d => { globalSalesData=d||[]; renderSalesTable(d||[]); })
+                    .withFailureHandler(e => { console.error(e); document.getElementById('sales-table-body').innerHTML = `<tr><td colspan="7" class="text-center p-6 text-danger font-bold"><i data-lucide="alert-circle" class="mx-auto mb-2"></i>Gagal memuat data. (Deploy Ulang Code.gs)</td></tr>`; lucide.createIcons(); })
+                    .getSalesData();
+            } else setTimeout(() => { renderSalesTable([]); }, 500);
+        }
+        
+        function updateSalesPrice() {
+            const name = document.getElementById('inp-sales-product').value;
+            const qty = document.getElementById('inp-sales-qty').value;
+            document.getElementById('inp-sales-price').value = calculateDynamicPrice(name, qty);
+        }
+        
+        document.getElementById('inp-sales-product')?.addEventListener('change', updateSalesPrice);
+        document.getElementById('inp-sales-qty')?.addEventListener('input', updateSalesPrice);
+        
+        function checkResiStatus() {
+            const r = document.getElementById('inp-sales-resi').value;
+            if(r && r.trim() !== '') { document.getElementById('inp-sales-status').value = 'Shipped'; }
+        }
+        
+        function renderSalesTable(data) {
+            const tbody = document.getElementById('sales-table-body'); tbody.innerHTML = '';
+            
+            let tToday=0, rToday=0, tWeek=0, rWeek=0, tMonth=0, rMonth=0;
+            
+            const now = new Date();
+            const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+            const day = now.getDay();
+            const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+            const startOfWeek = new Date(now.getFullYear(), now.getMonth(), diff).getTime();
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+
+            if(!data || data.length === 0){ 
+                tbody.innerHTML=`<tr><td colspan="7" class="text-center p-6 text-muted">Data kosong.</td></tr>`; 
+                updateSalesStatsUI(0,0,0,0,0,0);
+                return; 
+            }
+            
+            data.forEach(i => {
+                const isValid = !['Returned', 'Failed COD'].includes(i.status);
+                if(isValid && i.tanggal) {
+                    const dTime = new Date(i.tanggal).getTime();
+                    const val = parseInt(i.harga) || 0;
+                    if(dTime >= startOfMonth) { tMonth++; rMonth += val; }
+                    if(dTime >= startOfWeek) { tWeek++; rWeek += val; }
+                    if(dTime >= startOfToday) { tToday++; rToday += val; }
+                }
+
+                const stClr = i.status==='Completed'?'background: var(--success); color:white;':(i.status==='Shipped'?'background: var(--info); color:white;':(i.status==='Returned'||i.status.includes('Fail')?'background: var(--danger); color:white;':'background: var(--warning); color:black;'));
+                
+                let returBtn = i.status !== 'Returned' ? `<button onclick="openReturnModalFromSales(${i.row})" class="btn-icon" style="color: var(--warning);" title="Proses Retur"><i data-lucide="corner-up-left"></i></button>` : '';
+
+                tbody.innerHTML += `<tr>
+                    <td><div class="font-bold">${i.tanggal}</div>${i.resi ? `<div class="text-xs text-success font-bold mt-1 tracking-wider">${i.resi}</div>` : ''}</td>
+                    <td><div class="font-bold text-success">${i.marketplace}</div></td>
+                    <td><div class="font-bold">${i.name}</div><div class="text-sm text-muted">${i.phone}</div></td>
+                    <td><div class="font-bold">${i.product} <span class="text-muted text-sm ml-1">x${i.qty || 1}</span></div></td>
+                    <td class="font-bold text-success">Rp ${Number(i.harga||0).toLocaleString('id-ID')}</td>
+                    <td class="text-center"><span class="badge" style="${stClr}">${i.status}</span></td>
+                    <td class="text-right">
+                        <div class="flex justify-end items-center gap-1 flex-wrap">
+                            ${returBtn}
+                            <button onclick="copyFormatSales(${i.row})" class="btn-icon" style="color: var(--primary);" title="Copy Format Pengiriman"><i data-lucide="copy"></i></button>
+                            <button onclick="editSales(${i.row})" class="btn-icon" style="color: var(--success);" title="Edit"><i data-lucide="edit-2"></i></button>
+                            <button onclick="deleteSales(${i.row})" class="btn-icon" style="color: var(--danger);" title="Hapus"><i data-lucide="trash-2"></i></button>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+            
+            updateSalesStatsUI(tToday, rToday, tWeek, rWeek, tMonth, rMonth);
+            lucide.createIcons();
+        }
+
+        function updateSalesStatsUI(tToday, rToday, tWeek, rWeek, tMonth, rMonth) {
+            if(document.getElementById('stat-sales-today-qty')) document.getElementById('stat-sales-today-qty').innerText = tToday + ' Order';
+            if(document.getElementById('stat-sales-today-rev')) document.getElementById('stat-sales-today-rev').innerText = 'Rp ' + rToday.toLocaleString('id-ID');
+            
+            if(document.getElementById('stat-sales-week-qty')) document.getElementById('stat-sales-week-qty').innerText = tWeek + ' Order';
+            if(document.getElementById('stat-sales-week-rev')) document.getElementById('stat-sales-week-rev').innerText = 'Rp ' + rWeek.toLocaleString('id-ID');
+            
+            if(document.getElementById('stat-sales-month-qty')) document.getElementById('stat-sales-month-qty').innerText = tMonth + ' Order';
+            if(document.getElementById('stat-sales-month-rev')) document.getElementById('stat-sales-month-rev').innerText = 'Rp ' + rMonth.toLocaleString('id-ID');
+        }
+        
+        function openSalesModal() { 
+            document.getElementById('salesForm').reset(); 
+            document.getElementById('inp-sales-date').valueAsDate=new Date(); 
+            document.getElementById('inp-sales-qty').value = 1;
+            document.getElementById('sales-row-id').value=''; 
+            document.getElementById('modal-sales').classList.add('active'); 
+        }
+        function closeSalesModal() { document.getElementById('modal-sales').classList.remove('active'); }
+        
+        function submitSalesForm(e) {
+            e.preventDefault(); const id=document.getElementById('sales-row-id').value;
+            const p = { 
+                rowId: id, 
+                tanggal: document.getElementById('inp-sales-date').value, 
+                gudang: document.getElementById('inp-sales-gudang').value,
+                kurir: document.getElementById('inp-sales-kurir').value,
+                qty: document.getElementById('inp-sales-qty').value, 
+                resi: document.getElementById('inp-sales-resi').value, 
+                marketplace: document.getElementById('inp-sales-market').value, 
+                name: document.getElementById('inp-sales-name').value, 
+                phone: document.getElementById('inp-sales-phone').value, 
+                address: document.getElementById('inp-sales-address').value, 
+                product: document.getElementById('inp-sales-product').value, 
+                harga: document.getElementById('inp-sales-price').value, 
+                status: document.getElementById('inp-sales-status').value 
+            };
+            Swal.fire({title:'Menyimpan...', allowOutsideClick: false, didOpen:()=>Swal.showLoading()});
+            if(typeof google !== 'undefined') id ? google.script.run.withSuccessHandler(onSSuc).withFailureHandler(onSErr).updateSales(p) : google.script.run.withSuccessHandler(onSSuc).withFailureHandler(onSErr).saveSales(p); else setTimeout(()=>onSSuc({message:'Ok'}), 1000);
+            function onSSuc(r) { closeSalesModal(); Swal.fire('Berhasil!', r.message, 'success'); loadSalesData(); }
+            function onSErr(err) { Swal.fire('Error', err.message, 'error'); }
+        }
+
+        function editSales(id) {
+            const s = globalSalesData.find(x=>x.row===id); if(!s) return;
+            document.getElementById('sales-row-id').value=id; 
+            document.getElementById('inp-sales-date').value=s.tanggal; 
+            document.getElementById('inp-sales-gudang').value=s.gudang||''; 
+            document.getElementById('inp-sales-kurir').value=s.kurir||''; 
+            document.getElementById('inp-sales-resi').value=s.resi||''; 
+            document.getElementById('inp-sales-market').value=s.marketplace; 
+            document.getElementById('inp-sales-name').value=s.name; 
+            document.getElementById('inp-sales-phone').value=s.phone; 
+            document.getElementById('inp-sales-address').value=s.address; 
+            document.getElementById('inp-sales-product').value=s.product; 
+            document.getElementById('inp-sales-qty').value=s.qty || 1;
+            document.getElementById('inp-sales-price').value=s.harga; 
+            document.getElementById('inp-sales-status').value=s.status;
+            document.getElementById('modal-sales').classList.add('active');
+        }
+        function deleteSales(id) { Swal.fire({title:'Hapus?', icon:'warning', showCancelButton:true, confirmButtonColor:'#e11d48'}).then(r=>{if(r.isConfirmed){google.script.run.withSuccessHandler(()=>loadSalesData()).deleteSales(id)}}); }
+        function applySalesFilter() {
+            const s=document.getElementById('sales-search-filter').value.toLowerCase(), st=document.getElementById('sales-status-filter').value;
+            renderSalesTable(globalSalesData.filter(i => { const m = (i.name&&i.name.toLowerCase().includes(s)) || (i.resi&&i.resi.toLowerCase().includes(s)); return m && (st==='ALL'||i.status===st); }));
+        }
+        function exportSalesCSV() {
+            if(!globalSalesData.length) return Swal.fire('Oops','Data Kosong','info');
+            let csv = "No,Tanggal,Gudang,Kurir,No Resi,Marketplace,Nama,Phone,Address,Product,Qty,Harga,Status\n";
+            globalSalesData.forEach(s => csv += `"${s.no}","${s.tanggal}","${s.gudang}","${s.kurir}","${s.resi||''}","${s.marketplace}","${s.name}","${s.phone}","${String(s.address||'').replace(/\n/g,' ')}","${s.product}","${s.qty||1}","${s.harga}","${s.status}"\n`);
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = `Sales_Data_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+        }
+
+        // --- RETURN ---
+        function loadReturnedData() {
+            if(typeof google !== 'undefined') {
+                google.script.run
+                    .withSuccessHandler(d => { globalReturnedData=d||[]; renderReturnedTable(d||[]); })
+                    .withFailureHandler(e => {
+                        console.error(e);
+                        document.getElementById('returned-table-body').innerHTML = `<tr><td colspan="7" class="text-center p-6 text-danger font-bold"><i data-lucide="alert-circle" class="mx-auto mb-2" style="width: 2rem; height: 2rem;"></i><br>Gagal memuat data Retur.<br><span class="text-sm">Silakan lakukan: Deploy > Kelola Deployment > Edit > Versi Baru > Terapkan</span></td></tr>`;
+                        lucide.createIcons();
+                    })
+                    .getReturnedData();
+            } else setTimeout(() => renderReturnedTable([]), 500);
+        }
+        
+        function updateReturPrice() {
+            const name = document.getElementById('inp-retur-product').value;
+            const qty = document.getElementById('inp-retur-qty').value;
+            document.getElementById('inp-retur-harga').value = calculateDynamicPrice(name, qty);
+        }
+        
+        document.getElementById('inp-retur-product')?.addEventListener('change', updateReturPrice);
+        document.getElementById('inp-retur-qty')?.addEventListener('input', updateReturPrice);
+
+        function renderReturnedTable(data) {
+            const tbody = document.getElementById('returned-table-body'); tbody.innerHTML = '';
+            if(!data || data.length === 0){ tbody.innerHTML=`<tr><td colspan="7" class="text-center p-6 text-muted">Belum ada data retur.</td></tr>`; return; }
+            data.forEach(i => {
+                let fotoLink = i.buktiFoto ? `<a href="${i.buktiFoto}" target="_blank" class="badge" style="background: rgba(225, 29, 72, 0.1); color: var(--danger);"><i data-lucide="image" class="mr-1"></i> Foto</a>` : '-';
+                tbody.innerHTML += `<tr>
+                    <td><div class="font-bold">${i.tglReturned}</div></td>
+                    <td><div class="font-bold text-success">${i.resi}</div><div class="text-xs text-muted">${i.marketplace}</div></td>
+                    <td><div class="font-bold">${i.name}</div><div class="text-sm">${i.phone}</div></td>
+                    <td><div class="font-bold">${i.product} <span class="text-muted text-sm ml-1">x${i.qty || 1}</span></div></td>
+                    <td class="font-bold">${i.gudang}</td>
+                    <td class="text-center">${fotoLink}</td>
+                    <td class="text-right">
+                        <div class="flex justify-end items-center gap-1 flex-wrap">
+                            <button onclick="deleteReturned(${i.row})" class="btn-icon" style="color: var(--danger);"><i data-lucide="trash-2"></i></button>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+            lucide.createIcons();
+        }
+
+        function autoFillReturFromSales() {
+            const rowId = parseInt(document.getElementById('inp-retur-select-sales').value);
+            if (!rowId) {
+                document.getElementById('retur-sales-row-id').value = '';
+                document.getElementById('inp-retur-tanggal').value = '';
+                document.getElementById('inp-retur-resi').value = '';
+                document.getElementById('inp-retur-marketplace').value = '';
+                document.getElementById('inp-retur-name').value = '';
+                document.getElementById('inp-retur-phone').value = '';
+                document.getElementById('inp-retur-address').value = '';
+                document.getElementById('inp-retur-product').value = '';
+                document.getElementById('inp-retur-qty').value = '';
+                document.getElementById('inp-retur-harga').value = '';
+                document.getElementById('inp-retur-gudang').value = '';
+                return;
+            }
+            const s = globalSalesData.find(x => x.row === rowId);
+            if (s) {
+                document.getElementById('retur-sales-row-id').value = s.row;
+                document.getElementById('inp-retur-tanggal').value = s.tanggal;
+                document.getElementById('inp-retur-resi').value = s.resi || '';
+                document.getElementById('inp-retur-marketplace').value = s.marketplace;
+                document.getElementById('inp-retur-name').value = s.name;
+                document.getElementById('inp-retur-phone').value = s.phone;
+                document.getElementById('inp-retur-address').value = s.address;
+                document.getElementById('inp-retur-product').value = s.product;
+                document.getElementById('inp-retur-qty').value = s.qty || 1;
+                document.getElementById('inp-retur-harga').value = s.harga;
+                document.getElementById('inp-retur-gudang').value = s.gudang || '';
+            }
+        }
+
+        function openReturnedModal() {
+            document.getElementById('returnedForm').reset();
+            document.getElementById('retur-sales-row-id').value = '';
+            document.getElementById('inp-retur-tgl').valueAsDate = new Date();
+            
+            const select = document.getElementById('inp-retur-select-sales');
+            if (select) {
+                select.disabled = false;
+                select.innerHTML = '<option value="">-- Pilih Transaksi Penjualan --</option>' + 
+                    globalSalesData.filter(s => s.status !== 'Returned').map(s => `<option value="${s.row}">${s.tanggal} - ${s.name} (${s.resi || 'Tanpa Resi'})</option>`).join('');
+            }
+            
+            document.getElementById('modal-returned').classList.add('active');
+        }
+
+        function openReturnModalFromSales(id) {
+            const s = globalSalesData.find(x=>x.row===id); if(!s) return;
+            document.getElementById('returnedForm').reset();
+            
+            const select = document.getElementById('inp-retur-select-sales');
+            if (select) {
+                select.innerHTML = `<option value="${s.row}">${s.tanggal} - ${s.name} (${s.resi || 'Tanpa Resi'})</option>`;
+                select.value = s.row;
+                select.disabled = true;
+            }
+
+            document.getElementById('retur-sales-row-id').value = id;
+            document.getElementById('inp-retur-tanggal').value = s.tanggal;
+            document.getElementById('inp-retur-resi').value = s.resi || '';
+            document.getElementById('inp-retur-marketplace').value = s.marketplace;
+            document.getElementById('inp-retur-name').value = s.name;
+            document.getElementById('inp-retur-phone').value = s.phone;
+            document.getElementById('inp-retur-address').value = s.address;
+            document.getElementById('inp-retur-product').value = s.product;
+            document.getElementById('inp-retur-qty').value = s.qty || 1;
+            document.getElementById('inp-retur-harga').value = s.harga;
+            document.getElementById('inp-retur-gudang').value = s.gudang || '';
+            
+            document.getElementById('inp-retur-tgl').valueAsDate = new Date();
+            document.getElementById('modal-returned').classList.add('active');
+        }
+
+        function closeReturnedModal() { document.getElementById('modal-returned').classList.remove('active'); }
+
+        async function submitReturnedForm(e) {
+            e.preventDefault(); 
+            Swal.fire({title:'Memproses Retur...', allowOutsideClick: false, didOpen:()=>Swal.showLoading()});
+            try {
+                let fotoFile = null;
+                const fileInput = document.getElementById('inp-retur-foto').files[0];
+                if(fileInput) fotoFile = await getB64(fileInput);
+
+                const p = { 
+                    salesRowId: document.getElementById('retur-sales-row-id').value,
+                    tanggal: document.getElementById('inp-retur-tanggal').value, 
+                    resi: document.getElementById('inp-retur-resi').value, 
+                    marketplace: document.getElementById('inp-retur-marketplace').value, 
+                    name: document.getElementById('inp-retur-name').value, 
+                    phone: document.getElementById('inp-retur-phone').value, 
+                    address: document.getElementById('inp-retur-address').value, 
+                    product: document.getElementById('inp-retur-product').value, 
+                    qty: document.getElementById('inp-retur-qty').value,
+                    harga: document.getElementById('inp-retur-harga').value, 
+                    tglReturned: document.getElementById('inp-retur-tgl').value,
+                    gudang: document.getElementById('inp-retur-gudang').value,
+                    buktiFoto: fotoFile || {base64:null}
+                };
+                if(typeof google !== 'undefined') {
+                    google.script.run
+                        .withSuccessHandler(onRSuc)
+                        .withFailureHandler(e => { Swal.fire('Error', 'Gagal memproses. Error: ' + e.message, 'error'); })
+                        .saveReturned(p); 
+                } else setTimeout(()=>onRSuc({message:'Ok'}), 1000);
+            } catch(e) { Swal.fire('Error', 'Gagal membaca gambar', 'error'); }
+            
+            function onRSuc(r) { closeReturnedModal(); Swal.fire('Berhasil!', r.message, 'success'); switchTab('returned'); loadSalesData(); }
+        }
+
+        function deleteReturned(id) { Swal.fire({title:'Hapus Data Retur?', icon:'warning', showCancelButton:true, confirmButtonColor:'#e11d48'}).then(r=>{if(r.isConfirmed){google.script.run.withSuccessHandler(()=>loadReturnedData()).deleteReturned(id)}}); }
+
+        // --- ACCOUNTS ---
+        function loadAccountsData(){ 
+            if(typeof google !=='undefined') {
+                google.script.run
+                    .withSuccessHandler(d=>{globalAccountsData=d||[]; renderAcc(d||[]);})
+                    .withFailureHandler(e=>{
+                        console.error(e); 
+                        document.getElementById('acc-table-body').innerHTML = `<tr><td colspan="5" class="text-center p-6 text-danger font-bold"><i data-lucide="alert-circle" class="mx-auto mb-2"></i>Gagal memuat data. (Deploy Ulang Code.gs)</td></tr>`; 
+                        lucide.createIcons();
+                    })
+                    .getAccountsData(); 
+            } else setTimeout(() => renderAcc([]), 500);
+        }
+        function updateAccStats(t, f, d) { 
+            if(document.getElementById('stat-acc-total')) document.getElementById('stat-acc-total').innerText = t; 
+            if(document.getElementById('stat-acc-2fa')) document.getElementById('stat-acc-2fa').innerText = f; 
+            if(document.getElementById('stat-acc-platform')) document.getElementById('stat-acc-platform').innerText = d; 
+        }
+        function renderAcc(d){ 
+            const tb=document.getElementById('acc-table-body'); tb.innerHTML=''; 
+            let t=d.length, t2fa=0, pCount={};
+            if(!d || d.length === 0){ tb.innerHTML=`<tr><td colspan="5" class="p-6 text-center text-muted">Belum ada akun.</td></tr>`; updateAccStats(0,0,'-'); return;} 
+            d.forEach(i=>{ 
+                if(i.twofa) t2fa++; if(i.platform) pCount[i.platform] = (pCount[i.platform]||0) + 1;
+                
+                const safeEmail = String(i.email||'').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const safeTwofa = String(i.twofa||'').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                
+                tb.innerHTML+=`<tr>
+                    <td class="font-bold text-secondary">${i.platform}</td>
+                    <td class="font-bold">${safeEmail} <i onclick="copyAccountData(${i.row}, 'email')" data-lucide="copy" class="text-muted cursor-pointer ml-2" style="width:1rem;"></i></td>
+                    <td class="font-mono">•••••••• <i onclick="copyAccountData(${i.row}, 'password')" data-lucide="copy" class="text-muted cursor-pointer ml-2" style="width:1rem;"></i></td>
+                    <td>${safeTwofa||'-'} <i onclick="copyAccountData(${i.row}, 'twofa')" data-lucide="copy" class="text-muted cursor-pointer ml-2" style="width:1rem;"></i></td>
+                    <td class="text-right">
+                        <div class="flex justify-end items-center gap-1 flex-wrap">
+                            <button onclick="editAccount(${i.row})" class="btn-icon text-secondary"><i data-lucide="edit-2"></i></button>
+                            <button onclick="deleteAccount(${i.row})" class="btn-icon text-danger"><i data-lucide="trash-2"></i></button>
+                        </div>
+                    </td>
+                </tr>`; 
+            }); 
+            let dominant = Object.keys(pCount).reduce((a, b) => pCount[a] > pCount[b] ? a : b, "-");
+            updateAccStats(t, t2fa, dominant);
+            lucide.createIcons();
+        }
+        
+        function openAccountModal(){ document.getElementById('form-account').reset(); document.getElementById('acc-row-id').value=''; document.getElementById('modal-account').classList.add('active'); }
+        function closeAccountModal(){ document.getElementById('modal-account').classList.remove('active'); }
+        
+        function submitAccountForm(e){ 
+            e.preventDefault(); const rowId = document.getElementById('acc-row-id').value;
+            const payload = { rowId: rowId, created: document.getElementById('inp-acc-created').value, platform: document.getElementById('inp-acc-platform').value, email: document.getElementById('inp-acc-email').value, password: document.getElementById('inp-acc-password').value, twofa: document.getElementById('inp-acc-twofa').value, phone: document.getElementById('inp-acc-phone').value };
+            Swal.fire({ title: 'Menyimpan...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            if(typeof google !== 'undefined') rowId ? google.script.run.withSuccessHandler(onASuc).updateAccount(payload) : google.script.run.withSuccessHandler(onASuc).saveAccount(payload);
+            else setTimeout(() => onASuc({message: 'Preview Sukses'}), 1000);
+            function onASuc(res) { closeAccountModal(); Swal.fire('Berhasil!', res.message, 'success'); loadAccountsData(); }
+        }
+        
+        function editAccount(id){ 
+            const a = globalAccountsData.find(x=>x.row===id); 
+            if(a){ document.getElementById('acc-row-id').value=id; document.getElementById('inp-acc-created').value=a.created; document.getElementById('inp-acc-platform').value=a.platform; document.getElementById('inp-acc-email').value=a.email; document.getElementById('inp-acc-password').value=a.password; document.getElementById('inp-acc-twofa').value=a.twofa; document.getElementById('inp-acc-phone').value=a.phone; document.getElementById('modal-account').classList.add('active'); } 
+        }
+
+        function deleteAccount(id){ 
+            Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#e11d48' }).then((res) => {
+                if (res.isConfirmed) { if(typeof google !== 'undefined') { google.script.run.withSuccessHandler(() => { loadAccountsData(); Swal.fire('Terhapus!','','success'); }).deleteAccount(id); } }
+            }); 
+        }
+
+        // --- PROMPT ---
+        function loadPromptData(){ 
+            if(typeof google!=='undefined') {
+                google.script.run
+                .withSuccessHandler(d=>{
+                    globalPromptsData=d||[]; 
+                    if(document.getElementById('stat-prompt-total')) document.getElementById('stat-prompt-total').innerText = (d||[]).length; 
+                    renderPr(d||[]);
+                }).withFailureHandler((e) => {
+                    console.error(e);
+                    document.getElementById('prompt-cards-container').innerHTML = `<div class="col-span-full p-6 text-center text-danger font-bold"><i data-lucide="alert-circle" class="mx-auto mb-2"></i>Gagal memuat data Prompt. (Deploy Ulang Code.gs)</div>`;
+                    lucide.createIcons();
+                }).getPromptData(); 
+            } else {
+                setTimeout(() => renderPr([]), 500);
+            }
+        }
+        
+        function renderPr(d){ 
+            const ct=document.getElementById('prompt-cards-container'); ct.innerHTML=''; 
+            if(!d || d.length === 0){ct.innerHTML=`<div class="col-span-full p-6 text-center text-muted">Belum ada prompt yang tersimpan.</div>`; return;} 
+            
+            d.forEach(i=>{ 
+                const safeNama = String(i.nama||'').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const safePrompt = String(i.prompt||'').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+
+                ct.innerHTML+=`<div class="glass-card flex flex-col justify-between">
+                    <div class="flex justify-between items-start mb-4">
+                        <h4 class="font-bold text-lg" style="word-break: break-word;">${safeNama}</h4>
+                        <div class="flex items-center gap-1 flex-shrink-0">
+                            <button onclick="openEditPrompt(${i.row})" class="btn-icon text-primary"><i data-lucide="edit-2"></i></button>
+                            <button onclick="deletePrompt(${i.row})" class="btn-icon text-danger"><i data-lucide="trash-2"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-control mb-4" style="background: rgba(0,0,0,0.05); max-height: 150px; overflow-y: auto; overflow-x: hidden; word-break: break-word; white-space: pre-wrap; font-size: 0.9rem;">${safePrompt}</div>
+                    <button onclick="copyPromptDataText(${i.row})" class="btn w-full btn-outline text-warning" style="border-color: var(--warning);"><i data-lucide="copy"></i> Salin Prompt</button>
+                </div>`; 
+            });
+            lucide.createIcons();
+        }
+        
+        function openAddPrompt(){ document.getElementById('form-prompt').reset(); document.getElementById('prompt-row-id').value=''; document.getElementById('modal-prompt').classList.add('active'); }
+        function closePromptModal(){ document.getElementById('modal-prompt').classList.remove('active'); }
+        
+        function openEditPrompt(rowId) {
+            const item = globalPromptsData.find(p => p.row === rowId); if(!item) return;
+            document.getElementById('prompt-row-id').value = rowId; document.getElementById('inp-prompt-nama').value = item.nama; document.getElementById('inp-prompt-isi').value = item.prompt; document.getElementById('modal-prompt').classList.add('active');
+        }
+
+        function submitPromptForm(e){ 
+            e.preventDefault(); const rowId = document.getElementById('prompt-row-id').value; 
+            const payload = { rowId: rowId, nama: document.getElementById('inp-prompt-nama').value, prompt: document.getElementById('inp-prompt-isi').value };
+            Swal.fire({ title: 'Menyimpan...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            if(typeof google !== 'undefined') rowId ? google.script.run.withSuccessHandler(onPSuc).updatePromptData(payload) : google.script.run.withSuccessHandler(onPSuc).savePromptData(payload);
+            else setTimeout(() => onPSuc({message: 'Preview Sukses'}), 1000);
+            function onPSuc(res) { closePromptModal(); Swal.fire('Berhasil!', res.message, 'success'); loadPromptData(); }
+        }
+
+        function deletePrompt(rowId) {
+            Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#e11d48' }).then((res) => {
+                if (res.isConfirmed) { if(typeof google !== 'undefined') { google.script.run.withSuccessHandler(() => { loadPromptData(); Swal.fire('Terhapus!','','success'); }).deletePromptData(rowId); } }
+            });
+        }
+
+        // --- INIT ---
+        window.onload = () => { 
+            applyTheme(currentTheme); 
+            checkLogin(); 
+            
+            if(typeof google !== 'undefined') {
+                google.script.run.withSuccessHandler((options) => {
+                    const datalist = document.getElementById('createVideo-options');
+                    if(datalist) { datalist.innerHTML = ''; options.forEach(opt => { datalist.innerHTML += `<option value="${opt}">`; }); }
+                }).getCreateVideoOptions();
+            }
+
+            switchTab('dashboard'); 
+        };
+    </script>
+</body>
+</html>
